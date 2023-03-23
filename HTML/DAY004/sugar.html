@@ -4,22 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
+    <title>질문금지</title>
     <style>
+        @keyframes blink{
+            0% {opacity: 1;}
+            50% {opacity: 0;}
+            100% {opacity: 1;}
+        }
         h1{
             background-color: aqua;
             text-align: center;
         }
+        div{
+            background-color: yellow;
+            padding: 20px;
+            border: 5px dotted red;
+            margin: 30px;
+            border-radius: 50px 20px 40px 60px;
+        }
         img{
+            animation: blink 7s infinite;
             width: 600px;
         }
+
     </style>
 </head>
 <body>
     <p>✓ (명세/기획)HTML 웹페이지 만들기, 배경색 aqua, <span style="text-decoration: underline;">텍스트 중앙정렬</span></p>
     <h1>손에 짜지 마세요</h1>
     <div>
-        <img src = "getImage.do" alt="슈가시럽">
+        <p>내가 사라져볼게</p>
+        <img src = "getImage.do" alt="슈가시럽"> 
     </div>
     <b>질문금지!</b>
 </body>
