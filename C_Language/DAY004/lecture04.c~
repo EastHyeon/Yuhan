@@ -12,14 +12,10 @@ int main (){
 	enemy_hp = enemy_hp - player_atk;
 	printf("주인공이 적을 공격하여 %d의 데미지를 입혔습니다.\n", player_atk);
 	if(enemy_hp < 0){
-		printf("\n");
 		printf("적의 잔여 HP:0\n");
-		printf("\n");
 	}
 	else{
-		printf("\n");
-		printf("적의 잔여 HP:%d\n", enemy_hp);
-		printf("\n");
+	printf("적의 잔여 HP:%d\n", enemy_hp);
 	}
 
 	if(enemy_hp <= 0){
