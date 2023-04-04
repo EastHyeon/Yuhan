@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <stdbool.h>
 #include <conio.h>
+#include <stdlib.h>
 
 #define WAIT 0
 #define UP 1
@@ -9,6 +10,7 @@
 #define LEFT 3
 #define RIGHT 4
 #define JUMP 5
+#define EXIT 6
 
 struct Player{
     bool isDead;
@@ -33,23 +35,22 @@ int keyCode = 0;
 int main(){
     int game_state = 1;
 
-    int score = 0;
-
     init();
 
-    while (game_state)
+    while (game_state != 0)
     {
         system("cls");
-        // input º¯¼ö¿¡ ÀÔ·Â °ªÀ» ¹Þ´Â´Ù.
-        // game_state¿¡ µû¶ó Ãâ·ÂÇÒ ¸Þ´º¸¦ °áÁ¤ÇÑ´Ù.
-        // game_state == 1 : Å¸ÀÌÆ² ¸Þ´º
-        // game_state == 2 : µµ¿ò¸» ¸Þ´º
-        // game_state == 3 : Á¾·á
+        // input ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´Â´ï¿½.
+        // game_stateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+        // game_state == 1 : Å¸ï¿½ï¿½Æ² ï¿½Þ´ï¿½
+        // game_state == 2 : ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½
+        // game_state == 3 : ï¿½ï¿½ï¿½ï¿½
         int input = 0;
         if(game_state == 1){
             render_title();
             gotoxy(0, 10);
-            printf("¸Þ´º¸¦ ¼±ÅÃÇÏ¼¼¿ä : ");
+            //ï¿½Ô·ï¿½
+            printf("ï¿½Þ´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½ : ");
             scanf("%d", &input);
             if (input == 1){
                 game_state = 4;
@@ -64,13 +65,15 @@ int main(){
                 continue;
             }
             else{
+                printf("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½");
+                Sleep(1000);
                 continue;
             }
         }
         else if(game_state == 2){
             render_help();
             gotoxy(0, 10);
-            printf("¸Þ´º·Î µ¹¾Æ°©´Ï±î? (1.Yes / 2. NO) : ");
+            printf("ï¿½Þ´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½Ï±ï¿½? (1.Yes / 2. NO) : ");
             scanf("%d", &input);
             if (input == 1){
                 game_state = 1;
@@ -80,9 +83,14 @@ int main(){
                 game_state = 2;
                 continue;
             }
+            else{
+                printf("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½");
+                Sleep(1000);
+                continue;
+            }
         }
         else if(game_state == 3){
-            printf("Á¤¸»·Î Á¾·áÇÕ´Ï±î? (1.Yes / 2. NO) : ");
+            printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï±ï¿½? (1.Yes / 2. NO) : ");
             scanf("%d", &input);
             if (input == 1){
                 break;
@@ -91,55 +99,57 @@ int main(){
                 game_state = 1;
                 continue;
             }
-            else
+            else{
+                printf("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½");
+                Sleep(1000);
                 continue;
+            }
         }
         else if(game_state == 4){
             game_logic();
         }
     }
-    
 }
 
 void init(){
-    system("mode con cols=83 lines=30 | title µð³ë°ÔÀÓ 0.1");
+    system("mode con cols=83 lines=30 | title ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0.1");
 }
 
 void render_title(){
     render_background();
     gotoxy(3, 2);
-    printf("¢º DINO GAME v0.1");
+    printf("ï¿½ï¿½ DINO GAME v0.1");
     gotoxy(3, 5);
-    printf("1.°ÔÀÓ½ÃÀÛ");
+    printf("1.ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½");
     gotoxy(3, 6);
-    printf("2.ÇÃ·¹ÀÌ ¹æ¹ý");
+    printf("2.ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½");
     gotoxy(3, 7);
-    printf("3.Á¾·á");
+    printf("3.ï¿½ï¿½ï¿½ï¿½");
 }
 
 void render_help(){
     render_background();
     gotoxy(3, 2);
-    printf("¢º µµ¿ò¸»");
+    printf("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
     gotoxy(3, 5);
-    printf("½ºÆäÀÌ½º ¹Ù¸¦ ´­·¯¼­ Á¡ÇÁ");
+    printf("ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
     gotoxy(3, 6);
-    printf("¾Æ·¡ ¹æÇâÅ°¸¦ ´­·¯¼­ ¼÷ÀÌ±â");
+    printf("ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½");
     gotoxy(3, 7);
-    printf("´Ù°¡¿À´Â Àå¾Ö¹°À» ÇÇÇÏ¼¼¿ä!");
+    printf("ï¿½Ù°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½!");
 }
 
 void render_background(){
-    puts("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¢                                                                              ¦¢");
-    puts("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+    puts("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½                                                                              ï¿½ï¿½");
+    puts("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 }
 
 int keyControl(){
@@ -157,6 +167,9 @@ int keyControl(){
     else if(temp == 'd' || temp == 'D'){
         return RIGHT;
     }
+    else if(temp == 'q' || temp == 'Q'){
+        return EXIT;
+    }
     else if(temp == ' '){
         return JUMP;
     }
@@ -164,30 +177,37 @@ int keyControl(){
 
 void game_logic(){
     render_input();
+    render_game();
     keyCode = keyControl();
     struct Player player = {0, 0};
-    render_game();
 }
 
 void render_input(){
     gotoxy(0, 10);
     if (keyCode == UP){
-        printf("ÀÔ·Â : UP");
+        printf("ï¿½Ô·ï¿½ : UP");
     }
     else if (keyCode == DOWN){
-        printf("ÀÔ·Â : DOWN");
+        printf("ï¿½Ô·ï¿½ : DOWN");
     }
     else if (keyCode == LEFT){
-        printf("ÀÔ·Â : LEFT");
+        printf("ï¿½Ô·ï¿½ : LEFT");
     }
     else if (keyCode == RIGHT){
-        printf("ÀÔ·Â : RIGHT");
+        printf("ï¿½Ô·ï¿½ : RIGHT");
     }
     else if (keyCode == JUMP){
-        printf("ÀÔ·Â : JUMP");
+        printf("ï¿½Ô·ï¿½ : JUMP");
+    }
+    else if (keyCode == EXIT){
+        gotoxy(0, 0);
+        render_background();
+        gotoxy(3, 4);
+        printf("ï¿½Þ´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½Ï´ï¿½.");
+        Sleep(1000);
     }
     else{
-        printf("ÀÔ·Â : ´ë±âÁß");
+        printf("ï¿½Ô·ï¿½ : ï¿½ï¿½ï¿½ï¿½ï¿½");
     }
 }
 
@@ -196,6 +216,9 @@ void render_game(){
     render_background();
     gotoxy(2, 8);
     printf("-----------------------------------------------------------------------------");
+    gotoxy(5, 7);
+    printf("ï¿½ï¿½");
+    gotoxy(0, 0);
 }
 
 void gotoxy(int x, int y){
