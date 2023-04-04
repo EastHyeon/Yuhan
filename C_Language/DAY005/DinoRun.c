@@ -1,12 +1,22 @@
 #include <stdio.h>
 #include <windows.h>
 #include <stdbool.h>
+#include <conio.h>
 
-#define UP 0
-#define DOWN 1
-#define LEFT 2
-#define RIGHT 3
-#define JUMP 4
+#define WAIT 0
+#define UP 1
+#define DOWN 2
+#define LEFT 3
+#define RIGHT 4
+#define JUMP 5
+
+struct Player{
+    bool isDead;
+    bool isGrounded;
+    int x;
+    int y;
+
+};
 
 int keyControl();
 void init();
@@ -14,11 +24,16 @@ void render_title();
 void render_help();
 void render_background();
 void game_logic();
+void render_input();
 void render_game();
 void gotoxy(int, int);
 
+int keyCode = 0;
+
 int main(){
     int game_state = 1;
+
+    int score = 0;
 
     init();
 
@@ -37,6 +52,7 @@ int main(){
             printf("메뉴를 선택하세요 : ");
             scanf("%d", &input);
             if (input == 1){
+                game_state = 4;
                 continue;
             }
             else if (input == 2){
@@ -126,14 +142,60 @@ void render_background(){
     puts("└──────────────────────────────────────────────────────────────────────────────┘");
 }
 
+int keyControl(){
+    char temp = getch();
+
+    if(temp == 'w' || temp == 'W'){
+        return UP;
+    }
+    else if(temp == 'a' || temp == 'A'){
+        return LEFT;
+    }
+    else if(temp == 's' || temp == 'S'){
+        return DOWN;
+    }
+    else if(temp == 'd' || temp == 'D'){
+        return RIGHT;
+    }
+    else if(temp == ' '){
+        return JUMP;
+    }
+}
+
 void game_logic(){
-    render_background();
-    int keyCode = keyControl();
+    render_input();
+    keyCode = keyControl();
+    struct Player player = {0, 0};
+    render_game();
+}
+
+void render_input(){
     gotoxy(0, 10);
-    printf("입력 : %d", keyCode);
+    if (keyCode == UP){
+        printf("입력 : UP");
+    }
+    else if (keyCode == DOWN){
+        printf("입력 : DOWN");
+    }
+    else if (keyCode == LEFT){
+        printf("입력 : LEFT");
+    }
+    else if (keyCode == RIGHT){
+        printf("입력 : RIGHT");
+    }
+    else if (keyCode == JUMP){
+        printf("입력 : JUMP");
+    }
+    else{
+        printf("입력 : 대기중");
+    }
 }
 
 void render_game(){
+    gotoxy(0,0);
+    render_background();
+    gotoxy(2, 8);
+    printf("-----------------------------------------------------------------------------");
 }
 
 void gotoxy(int x, int y){
