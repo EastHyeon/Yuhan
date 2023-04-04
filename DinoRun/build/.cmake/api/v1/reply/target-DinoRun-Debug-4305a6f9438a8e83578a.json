@@ -105,7 +105,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "add.c",
+			"path" : "console.c",
 			"sourceGroupIndex" : 0
 		},
 		{
@@ -117,7 +117,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "sub.c",
+			"path" : "menu.c",
 			"sourceGroupIndex" : 0
 		}
 	],
