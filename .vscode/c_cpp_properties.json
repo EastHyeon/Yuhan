@@ -10,7 +10,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "D:/MINGW/x86_64-12.2.0-release-posix-seh-ucrt-rt_v10-rev2/mingw64/bin/gcc.exe",
+            "compilerPath": "D:/MINGW/bin/gcc.exe",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64"
