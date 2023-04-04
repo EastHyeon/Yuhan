@@ -1,15 +1,15 @@
-#include <stdio.h>
 #include "game.h"
 
 int main()
 {
-    int a = 1;
-    int b = 2;
+    int GameState = 1;
 
-    int c = add(a, b);
-    int d = sub(a, b);
+    Init();
+    CursorHide();
 
-    printf("%d %d\n", c, d);
-
-    return 0;
+    do
+    {
+        RenderTitle();
+        ClearBackground();
+    } while (GameState != 0);
 }
