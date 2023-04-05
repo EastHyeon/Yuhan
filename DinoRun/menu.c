@@ -1,7 +1,7 @@
 #include "game.h"
 
 void Init(void){
-    system("mode con cols=83 lines=30 | title 디노게임 0.1");
+    system("mode con cols=90 lines=32 | title 디노게임 0.1");
 }
 
 void CursorHide(void){
@@ -13,17 +13,11 @@ void CursorHide(void){
 
 void RenderBackground(void){
     GotoXY(0, 0);
-    puts("┌──────────────────────────────────────────────────────────────────────────────┐"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("│                                                                              │"); Sleep(40);
-    puts("└──────────────────────────────────────────────────────────────────────────────┘"); Sleep(40);
+    puts("┌───────────────────────────────────────────────────────────────────────────────────────┐"); Sleep(40);
+    for(int i = 1; i < 30; i++){
+        puts("│                                                                                       │"); Sleep(40);
+    }
+    puts("└───────────────────────────────────────────────────────────────────────────────────────┘"); Sleep(40);
 }
 
 void ClearBackground(void){
@@ -36,19 +30,12 @@ void ClearBackground(void){
 void RenderTitle(void){
     int count;
     RenderBackground();
-    GotoXY(3, 2);
-    printf("D"); Sleep(80);
-    printf("I"); Sleep(80);
-    printf("N"); Sleep(80);
-    printf("O"); Sleep(80);
-    printf(" G"); Sleep(80);
-    printf("A"); Sleep(80);
-    printf("M"); Sleep(80);
-    printf("E"); Sleep(80);
-    printf(" v"); Sleep(80);
-    printf("0"); Sleep(80);
-    printf("."); Sleep(80);
-    printf("1"); Sleep(80);
+    GotoXY(2, 2); puts("???   ??????   ??????  ??? ?????? ????   ???    ??????? ???????   ??? ??????? "); Sleep(80);
+    GotoXY(2, 3); puts("???? ???????   ??????  ????????????????  ???    ????????????????  ????????????"); Sleep(80);
+    GotoXY(2, 4); puts(" ??????? ???   ????????????????????????? ???    ???  ???????????? ??????   ???"); Sleep(80);
+    GotoXY(2, 5); puts("  ?????  ???   ?????????????????????????????    ???  ???????????????????   ???"); Sleep(80);
+    GotoXY(2, 6); puts("   ???   ????????????  ??????  ?????? ??????    ?????????????? ???????????????"); Sleep(80);
+    GotoXY(2, 7); puts("   ???    ??????? ???  ??????  ??????  ?????    ??????? ??????  ????? ??????? "); Sleep(80);
     while(1){
         if(GetAsyncKeyState(VK_SPACE) & 0x8000){
             break;
@@ -81,9 +68,9 @@ int RenderMenu(void){
     while(1){
         //Input 패스
 
-        if((GetAsyncKeyState(VK_UP) & 1 ) && (choose > 1)){
+        if((GetAsyncKeyState(KEY_UP) & 1 ) && (choose > 1)){
             choose--;
-        }else if((GetAsyncKeyState(VK_DOWN) & 1) && (choose < 3)){
+        }else if((GetAsyncKeyState(KEY_DOWN) & 1) && (choose < 3)){
             choose++;
         }else if(GetAsyncKeyState(VK_SPACE) & 1){
             GotoXY(4, 4);
@@ -103,12 +90,12 @@ int RenderMenu(void){
                 GotoXY(3, 7);
                 printf("▶ 종료 : 정말로 종료합니까? (Y/N)");
                 while(1){
-                    if(GetAsyncKeyState(0x59) & 1){
+                    if(GetAsyncKeyState(KEY_Y) & 1){
                         GotoXY(3, 7);
                         printf("▶ 종료 : 종료 중...               ");
                         return 3;
                     }
-                    else if(GetAsyncKeyState(0x4E) & 1){
+                    else if(GetAsyncKeyState(KEY_N) & 1){
                         GotoXY(3, 7);
                         printf("                                   ");
                         break;
@@ -179,4 +166,8 @@ void GotoXY(int x, int y){
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD pos = {x, y};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
+void PrintCenter(const char *Str){
+
 }
