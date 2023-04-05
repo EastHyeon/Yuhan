@@ -11,6 +11,7 @@ void Init(void);
 void CursorHide(void);
 void RenderBackground(void);
 void ClearBackground(void);
+void CLearAnimation(void);
 void RenderTitle(void);
 int RenderMenu(void);
 int RenderHelp(void);

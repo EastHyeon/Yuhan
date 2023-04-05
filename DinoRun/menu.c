@@ -1,8 +1,7 @@
 #include "game.h"
 
 void Init(void){
-    system("mode con cols=90 lines=32 | title 디노게임 0.1 |");
-    SetAllColor(DARK_GRAY, GRAY);
+    system("mode con cols=90 lines=32 | title 디노게임 0.1 | color 70");
 }
 
 void CursorHide(void){
@@ -14,23 +13,34 @@ void CursorHide(void){
 
 void RenderBackground(void){
     GotoXY(0, 0);
-    puts("┌──────────────────────────────────────────────────────────────────────────────────────┐"); Sleep(40);
+    puts("┌──────────────────────────────────────────────────────────────────────────────────────┐");;
     for(int i = 1; i < 30; i++){
-        puts("│                                                                                      │"); Sleep(40);
+        puts("│                                                                                      │");;
     }
-    puts("└──────────────────────────────────────────────────────────────────────────────────────┘"); Sleep(40);
+    puts("└──────────────────────────────────────────────────────────────────────────────────────┘");;
 }
 
 void ClearBackground(void){
+    SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
     for(int i = 1; i < 30; i++){
         GotoXY(2,i);
         printf("                                                                                     ");
     }
 }
 
+void ClearAnimation(void){
+    SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
+    for(int i = 1; i < 30; i++){
+        GotoXY(2,i);
+        printf("                                                                                     "); Sleep(20);
+    }
+}
+
 void RenderTitle(void){
     int count;
     RenderBackground();
+    ClearAnimation();
+    SetAllColor(BLACK, WHITE);
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 3); Sleep(40);
     WriteLineCenter("::'########::'####:'##::: ##::'#######:::", 4); Sleep(40);
     WriteLineCenter(":: ##:::: ##:: ##:: ####: ##: ##:::: ##::", 5); Sleep(40);
@@ -40,7 +50,8 @@ void RenderTitle(void){
     WriteLineCenter(":: ########::'####: ##::. ##:. #######:::", 9); Sleep(40);
     WriteLineCenter("::........:::....::..::::..:::.......::::", 10); Sleep(40);
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 11); Sleep(40);
-    WriteLineCenter("V 0.1 개발:202327005 김동현", 13);
+    SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
+    WriteLineCenter("V 0.1 202327005 김동현", 13);
     while(1){
         if(GetAsyncKeyState(VK_SPACE) & 0x8000){
             break;
@@ -48,13 +59,15 @@ void RenderTitle(void){
 
         count++;
         if(count>50){
-            WriteLineCenter("스페이스바를 눌러서 시작", 18);
+            SetColor(GREEN);
+            WriteLineCenter(">> 스페이스바를 눌러서 시작 <<", 18);
+            SetColor(DEFAULT_TEXT);
             count = 0;
         }
 
         count++;
         if(count>50){
-            WriteLineCenter("                          ", 18);
+            WriteLineCenter("                              ", 18);
             count = 0;
         }
         Sleep(17);
@@ -64,7 +77,7 @@ void RenderTitle(void){
 
 int RenderMenu(void){
     ClearBackground();
-    SetColor(WHITE);
+    SetAllColor(BLACK, WHITE);
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 3);
     WriteLineCenter("::'########::'####:'##::: ##::'#######:::", 4);
     WriteLineCenter(":: ##:::: ##:: ##:: ####: ##: ##:::: ##::", 5);
@@ -74,12 +87,12 @@ int RenderMenu(void){
     WriteLineCenter(":: ########::'####: ##::. ##:. #######:::", 9);
     WriteLineCenter("::........:::....::..::::..:::.......::::", 10);
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 11);
-    SetColor(GRAY);
+    SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
     int count = 0;
-    int choose = 1;
+    static int choose = 1;
+    int xPos = GetCenter("시작") - 2;
     while(1){
         //Input 패스
-
         if((GetAsyncKeyState(KEY_UP) & 1 ) && (choose > 1)){
             choose--;
         }else if((GetAsyncKeyState(KEY_DOWN) & 1) && (choose < 3)){
@@ -90,28 +103,32 @@ int RenderMenu(void){
             {
             case 1:
                 SetColor(GREEN);
-                WriteLineCenter("> 시작 : 선택됨", 18);
-                SetColor(GRAY);
-                Sleep(1000);
+                GotoXY(xPos, 18);
+                printf("시작");
+                SetColor(DEFAULT_TEXT);
+                Sleep(500);
                 return 1;
             case 2:
                 SetColor(GREEN);
-                WriteLineCenter("> 게임정보 : 선택됨", 19);
-                Sleep(1000);
-                SetColor(GRAY);
+                GotoXY(xPos, 19);
+                printf("게임정보");
+                Sleep(500);
+                SetColor(DEFAULT_TEXT);
                 return 2;
             case 3:
                 SetColor(GREEN);
-                WriteLineCenter("> 종료 : 정말로 종료합니까? (Y/N)", 20);
+                GotoXY(xPos, 20);
+                printf("종료 | 정말로 종료합니까? (Y/N)");
                 while(1){
                     if(GetAsyncKeyState(KEY_Y) & 0x8000){
-                        WriteLineCenter("> 종료 : 종료 중...", 20);
-                        SetColor(GRAY);
+                        ClearLine(20);
+                        GotoXY(xPos, 20);
+                        printf("종료중입니다...");
+                        SetColor(DEFAULT_TEXT);
                         return 3;
                     }
                     else if(GetAsyncKeyState(KEY_N) & 0x8000){
-                        WriteLineCenter("                                   ", 20); 
-                        SetColor(GRAY);
+                        ClearLine(20);
                         break;
                     }
                 }
@@ -124,38 +141,38 @@ int RenderMenu(void){
         //Render 패스 
         WriteCenter("선택 : ", 13);
         printf("%d", choose);
-        int xPos = GetCenter("시작") - 2;
         GotoXY(xPos, 18);
         printf("시작");
         GotoXY(xPos, 19);
         printf("게임정보");
         GotoXY(xPos, 20);
         printf("종료");
+
         if(choose == 1){
-            SetColor(GREEN);
+            SetColor(DARK_GREEN);
             GotoXY(xPos - 2, 18);
             printf(">");
-            SetColor(GRAY);
+            SetColor(DEFAULT_TEXT);
             GotoXY(xPos - 2, 19);
             printf(" ");
             GotoXY(xPos - 2, 20);
             printf(" ");
         }
         else if(choose == 2){
-            SetColor(GREEN);
+            SetColor(DARK_GREEN);
             GotoXY(xPos - 2, 19);
             printf(">");
-            SetColor(GRAY);
+            SetColor(DEFAULT_TEXT);
             GotoXY(xPos - 2, 18);
             printf(" ");
             GotoXY(xPos - 2, 20);
             printf(" ");
         }
         else if(choose == 3){
-            SetColor(GREEN);
+            SetColor(DARK_GREEN);
             GotoXY(xPos - 2, 20);
             printf(">");
-            SetColor(GRAY);
+            SetColor(DEFAULT_TEXT);
             GotoXY(xPos - 2, 18);
             printf(" ");
             GotoXY(xPos - 2, 19);
@@ -166,27 +183,38 @@ int RenderMenu(void){
 
 int RenderHelp(void){
     ClearBackground();
+    int xPos = 9;
+    WriteLineCenter("도움말", 3);
+    GotoXY(xPos,6);
+    printf("아래 방향키를 눌러서 숙이기");
+    GotoXY(xPos,7);
+    printf("아래 방향키를 눌러서 숙이기");
+    GotoXY(xPos,8);
+    printf("다가오는 장애물을 피하세요!");
+
+    GotoXY(xPos,9);
+    printf("C언어 공부를 위해 제작된 게임입니다.");
+    GotoXY(xPos,10);
+    printf("CHROME DINO 게임을 기반으로 하고있습니다.");
+    GotoXY(xPos,11);
+    printf("202327005 김동현");
+    WriteLineCenter("돌아갈려면 스페이스바를 누르십시오.",25);
     while(1){
         if(GetAsyncKeyState(VK_SPACE) & 1){
-            GotoXY(3, 8);
-            printf("                                    "); 
-            GotoXY(3, 8);
-            printf("메뉴로 돌아갑니다."); 
+            SetColor(GREEN);
+            ClearLine(25);
+            WriteLineCenter("메뉴로 돌아갑니다.", 25); 
+            SetColor(DEFAULT_TEXT);
             Sleep(1000);
             break;
         } 
         GotoXY(3, 2);
-        printf("도움말");
-        GotoXY(3, 5);
-        printf("스페이스 바를 눌러서 점프");
-        GotoXY(3, 6);
-        printf("아래 방향키를 눌러서 숙이기");
-        GotoXY(3, 7);
-        printf("다가오는 장애물을 피하세요!");
-        GotoXY(3, 8);
-        printf("돌아갈려면 스페이스바를 누르십시오.");
     }
     return 1;
+}
+
+int ExitMenu(void){
+    
 }
 
 void GotoXY(int x, int y){
@@ -257,7 +285,7 @@ void ClearLine(int y){
 
 void SetColor(int TextColor){
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(handle, TextColor);
+    SetConsoleTextAttribute(handle, (DEFAULT_BACKGROUND<<4) + TextColor);
 }
 
 void SetAllColor(int BackGroundColor, int TextColor){

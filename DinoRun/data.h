@@ -24,6 +24,8 @@ enum {
     VIOLET,
     YELLOW,
     WHITE,
+    DEFAULT_BACKGROUND = 0,
+    DEFAULT_TEXT = 7,
 };
 
 //½ºÅ©¸°
