@@ -86,6 +86,7 @@ int RenderMenu(void){
         }else if((GetAsyncKeyState(VK_DOWN) & 1) && (choose < 3)){
             choose++;
         }else if(GetAsyncKeyState(VK_SPACE) & 1){
+            GotoXY(4, 4);
             switch (choose)
             {
             case 1:
@@ -108,7 +109,9 @@ int RenderMenu(void){
                         return 3;
                     }
                     else if(GetAsyncKeyState(0x4E) & 1){
-                        return 1;
+                        GotoXY(3, 7);
+                        printf("                                   ");
+                        break;
                     }
                 }
                 break;

@@ -19,6 +19,8 @@ int main()
             continue;
         case 3:
             Sleep(1000);
+            system("cls");
+            printf("Á¾·áµÊ");
             exit(0);
         default:
             continue;
