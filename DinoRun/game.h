@@ -6,5 +6,6 @@ void CursorHide(void);
 void RenderBackground(void);
 void ClearBackground(void);
 void RenderTitle(void);
-void RenderHelp(void);
+int RenderMenu(void);
+int RenderHelp(void);
 void GotoXY(int, int);

@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "DinoRun::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-DinoRun-Debug-4305a6f9438a8e83578a.json",
+					"jsonFile" : "target-DinoRun-Debug-923599cab27f3e90326d.json",
 					"name" : "DinoRun",
 					"projectIndex" : 0
 				}
@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/WORKSPACE/Yuhan/DinoRun/build",
-		"source" : "D:/WORKSPACE/Yuhan/DinoRun"
+		"build" : "C:/202327005/Yuhan/DinoRun/build",
+		"source" : "C:/202327005/Yuhan/DinoRun"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 5
 	}
 }
