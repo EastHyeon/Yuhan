@@ -216,7 +216,6 @@ void RenderTitle(void){
         }
         Sleep(17);
     }
-
 }
 
 //메뉴화면 출력

@@ -9,13 +9,20 @@ int main(){
 
     Init();
 
+    RenderTitle();
     while(1){
-        int currentTick = GetTickCount();
-        if(currentTick - lastTick < WAIT_TICK)
-            continue;
-        lastTick = currentTick;
-
-        
+        switch(gameState){
+            case EXIT:
+                break;
+            case MENU:
+                gameState = RenderMenu();
+                break;
+            case GAME:
+                break;
+            case HELP:
+                gameState = RenderHelp();
+                break;
+        }
     }
 }
 

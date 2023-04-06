@@ -7,7 +7,8 @@
 // 게임정보
 #define GAME_VERSION "디노게임 v0.1 | 202327005 김동현" 
 #define WAIT_TICK 1000 / 30
-#define SCRREN_MIN_X 2
+#define SCREEN_MIN_X 2
+#define SCREEN_MAX_X 86
 #define SCREEN_MIN_Y 1
 #define SCREEN_MAX_Y 30
 
@@ -52,15 +53,16 @@ enum {
 
 #pragma region SCREEN_DECL
 void InitScreen(void);
+void InitScreenFade(void);
 void InitBackGround(void);
 #pragma endregion
 
 #pragma region RENDER_DECL
-void Renderer(int);
-
 void RenderTitle(void);
 void RenderAuthor(void);
-void RenderMenu(void);
+void RenderTitle(void);
+enum GameState RenderMenu(void);
+enum GameState RenderHelp(void);
 #pragma endregion
 
 #pragma region UTILL_DECL

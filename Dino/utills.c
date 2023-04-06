@@ -24,9 +24,9 @@ void SetAllColor(int BackGroundColor, int TextColor){
 }
 
 int WriteCenter(const char *Str, int y){
-    int screenWidth = 88;
+    int screenWidth = SCREEN_MAX_X;
     int len = euc_kr_strlen(Str);
-    int xPos = (screenWidth - len) / 2 + 1;
+    int xPos = (screenWidth - len) / 2 + SCREEN_MIN_X;
 
     if(xPos <2){
         xPos = 2;
@@ -38,11 +38,11 @@ int WriteCenter(const char *Str, int y){
 }
 
 int WriteLineCenter(const char *Str, int y){
-    int screenWidth = 88;
+    int screenWidth = SCREEN_MAX_X;
     int len = euc_kr_strlen(Str);
-    int xPos = (screenWidth - len) / 2 + 1;
+    int xPos = (screenWidth - len) / 2 + SCREEN_MIN_X;
 
-    if(xPos <2){
+    if(xPos < 2){
         xPos = 2;
     }
 
@@ -52,18 +52,18 @@ int WriteLineCenter(const char *Str, int y){
 }
 
 int GetCenter(const char *Str){
-    int screenWidth = 88;
+    int screenWidth = SCREEN_MAX_X;
     int len = euc_kr_strlen(Str);
-    int xPos = (screenWidth - len) / 2 + 1;
+    int xPos = (screenWidth - len) / 2 + SCREEN_MIN_X;
 
-    if(xPos <2){
+    if(xPos < 2){
         xPos = 2;
     }
     return xPos;
 }
 
 void ClearLine(int y){
-    GotoXY(2, y);
+    GotoXY(SCREEN_MIN_X, y);
     printf("                                                                                     ");
 }
 
