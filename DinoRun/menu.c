@@ -81,6 +81,7 @@ void RenderTitle(void){
     WriteLineCenter(GAME_VERSION, 13);
     while(1){
         if(GetAsyncKeyState(VK_SPACE) & 0x8000){
+            Sleep(200);
             break;
         } 
 
@@ -118,51 +119,72 @@ int RenderMenu(void){
     int count = 0;
     static int choose = 1;
     int xPos = GetCenter("시작") - 2;
+
+    int lastTick = 0;
+    int lastInputTick = 0;
+    bool processingInput = false;
     while(1){
-        //Input 패스
-        if((GetAsyncKeyState(KEY_UP) & 1 ) && (choose > 1)){
-            choose--;
-        }else if((GetAsyncKeyState(KEY_DOWN) & 1) && (choose < 3)){
-            choose++;
-        }else if(GetAsyncKeyState(VK_SPACE) & 1){
-            GotoXY(4, 4);
-            switch (choose)
-            {
-            case 1:
-                SetColor(GREEN);
-                GotoXY(xPos, 18);
-                printf("시작");
-                SetColor(DEFAULT_TEXT);
-                Sleep(500);
-                return 1;
-            case 2:
-                SetColor(GREEN);
-                GotoXY(xPos, 19);
-                printf("게임정보");
-                Sleep(500);
-                SetColor(DEFAULT_TEXT);
-                return 2;
-            case 3:
-                SetColor(GREEN);
-                GotoXY(xPos, 20);
-                printf("종료 | 정말로 종료합니까? (Y/N)");
-                while(1){
-                    if(GetAsyncKeyState(KEY_Y) & 0x8000){
-                        ClearLine(20);
-                        GotoXY(xPos, 20);
-                        printf("종료중입니다...");
-                        SetColor(DEFAULT_TEXT);
-                        return 3;
-                    }
-                    else if(GetAsyncKeyState(KEY_N) & 0x8000){
-                        ClearLine(20);
-                        break;
-                    }
-                }
-                break;
-            default: 
-                break;
+        int currentTick = GetTickCount();
+        if(currentTick - lastTick < WAIT_TICK)
+            continue;
+        lastTick = currentTick;
+
+        if((GetAsyncKeyState(KEY_UP) & 0x8000  ) && (choose > 1)){
+            if(currentTick - lastInputTick > INPUT_SENSITIVITY){
+                choose--;
+                processingInput = true;
+                lastInputTick = currentTick;
             }
+        }else if((GetAsyncKeyState(KEY_DOWN) & 0x8000 ) && (choose < 3)){
+            if(currentTick - lastInputTick > INPUT_SENSITIVITY){
+                choose++;
+                processingInput = true;
+                lastInputTick = currentTick;
+            }
+        }else if(GetAsyncKeyState(VK_SPACE) & 0x8000 ){
+            if(currentTick - lastInputTick > INPUT_SENSITIVITY){
+                switch (choose)
+                {
+                case 1:
+                    SetColor(GREEN);
+                    GotoXY(xPos, 18);
+                    printf("시작");
+                    SetColor(DEFAULT_TEXT);
+                    Sleep(500);
+                    return 1;
+                case 2:
+                    SetColor(GREEN);
+                    GotoXY(xPos, 19);
+                    printf("게임정보");
+                    Sleep(500);
+                    SetColor(DEFAULT_TEXT);
+                    return 2;
+                case 3:
+                    SetColor(GREEN);
+                    GotoXY(xPos, 20);
+                    printf("종료 | 정말로 종료합니까? (Y/N)");
+                    while(1){
+                        if(GetAsyncKeyState(KEY_Y) & 0x8000){
+                            ClearLine(20);
+                            GotoXY(xPos, 20);
+                            printf("종료중입니다...");
+                            SetColor(DEFAULT_TEXT);
+                            return 3;
+                        }
+                        else if(GetAsyncKeyState(KEY_N) & 0x8000){
+                            ClearLine(20);
+                            break;
+                        }
+                    }
+                    break;
+                default: 
+                    break;
+                }
+                lastInputTick = currentTick;
+            }
+            processingInput = true;
+        }else{
+            processingInput = false;
         }
  
         //Render 패스 
