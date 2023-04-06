@@ -46,14 +46,18 @@ void ClearAnimation(void){
 
 void RenderAuthor(void){
     SetAllColor(DARK_GRAY, BLACK);
+    
     for(int i = 1; i < 30; i++){
         GotoXY(2,i);
         printf("                                                                                     ");
     }
+
+    SetAllColor(DARK_GRAY, GREEN);
     WriteLineCenter(" __ __ _____ _____ _____ _____    _____ _____ _____ _____ ", 12);
     WriteLineCenter("|  |  |  |  |  |  |  _  |   | |  |   __|  _  |     |   __|", 13);
     WriteLineCenter("|_   _|  |  |     |     | | | |  |  |  |     | | | |   __|", 14);
     WriteLineCenter("  |_| |_____|__|__|__|__|_|___|  |_____|__|__|_|_|_|_____|", 15);
+    SetAllColor(DARK_GRAY, BLACK);
 
     Sleep(1000);
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
