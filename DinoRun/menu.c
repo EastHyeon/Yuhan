@@ -1,7 +1,7 @@
 #include "game.h"
 
 void Init(void){
-    system("mode con cols=90 lines=32 | title 디노게임 0.1 | color 70");
+    system("mode con cols=91 lines=35 | title 디노게임 0.1 | color 70");
 }
 
 void CursorHide(void){
@@ -13,11 +13,19 @@ void CursorHide(void){
 
 void RenderBackground(void){
     GotoXY(0, 0);
-    puts("┌──────────────────────────────────────────────────────────────────────────────────────┐");;
+    puts("┌──────────────────────────────────────────────────────────────────────────────────────┐");
     for(int i = 1; i < 30; i++){
-        puts("│                                                                                      │");;
+        puts("│                                                                                      │");
     }
-    puts("└──────────────────────────────────────────────────────────────────────────────────────┘");;
+    puts("└──────────────────────────────────────────────────────────────────────────────────────┘");
+    GotoXY(0, 31);
+    puts("┌──────────────────────────────────────────────────────────────────────────────────────┐");
+    for(int i = 0; i < 1; i++){
+        puts("│                                                                                      │");
+    }
+    puts("└──────────────────────────────────────────────────────────────────────────────────────┘");
+    WriteLineCenter(GAME_VERSION, 32);
+    RenderAuthor();
 }
 
 void ClearBackground(void){
@@ -36,6 +44,21 @@ void ClearAnimation(void){
     }
 }
 
+void RenderAuthor(void){
+    SetAllColor(DARK_GRAY, BLACK);
+    for(int i = 1; i < 30; i++){
+        GotoXY(2,i);
+        printf("                                                                                     ");
+    }
+    WriteLineCenter(" __ __ _____ _____ _____ _____    _____ _____ _____ _____ ", 12);
+    WriteLineCenter("|  |  |  |  |  |  |  _  |   | |  |   __|  _  |     |   __|", 13);
+    WriteLineCenter("|_   _|  |  |     |     | | | |  |  |  |     | | | |   __|", 14);
+    WriteLineCenter("  |_| |_____|__|__|__|__|_|___|  |_____|__|__|_|_|_|_____|", 15);
+
+    Sleep(1000);
+    SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
+}
+
 void RenderTitle(void){
     int count;
     RenderBackground();
@@ -51,7 +74,7 @@ void RenderTitle(void){
     WriteLineCenter("::........:::....::..::::..:::.......::::", 10); Sleep(40);
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 11); Sleep(40);
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
-    WriteLineCenter("V 0.1 202327005 김동현", 13);
+    WriteLineCenter(GAME_VERSION, 13);
     while(1){
         if(GetAsyncKeyState(VK_SPACE) & 0x8000){
             break;
@@ -198,11 +221,23 @@ int RenderHelp(void){
     printf("CHROME DINO 게임을 기반으로 하고있습니다.");
     GotoXY(xPos,11);
     printf("202327005 김동현");
+    xPos = GetCenter("│                                                    │");
+    GotoXY(xPos,24);
+    puts("┌────────────────────────────────────────────────────┐");
+    WriteLineCenter("│                                                    │", 25);
+    GotoXY(xPos,26);
+    puts("└────────────────────────────────────────────────────┘");
     WriteLineCenter("돌아갈려면 스페이스바를 누르십시오.",25);
     while(1){
         if(GetAsyncKeyState(VK_SPACE) & 1){
-            SetColor(GREEN);
             ClearLine(25);
+            GotoXY(xPos,24);
+            SetColor(DEFAULT_TEXT);
+            puts("┌────────────────────────────────────────────────────┐");
+            WriteLineCenter("│                                                    │", 25);
+            GotoXY(xPos,26);
+            puts("└────────────────────────────────────────────────────┘");
+            SetColor(GREEN);
             WriteLineCenter("메뉴로 돌아갑니다.", 25); 
             SetColor(DEFAULT_TEXT);
             Sleep(1000);

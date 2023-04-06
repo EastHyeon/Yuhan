@@ -17,10 +17,75 @@
         }
         .div1{
             height: 150px;
-            background-color: aliceblue;
+            background-color: yellow;
         }
-        ul{
+        #div1_1{
+            height: 150px;
+            background-color: black;
+            text-align: center;
+            width: 30%;
+            float: left;
+        }
+        #div1_1 img{
+            /*높이 150px, 이미지 높이 46px*/
+            margin-top: 52px;
+        }
+        #div1_2{
+            height: 150px;
+            width: 70%;
+            background-color: gray;
+            text-align: center;
+            float: left;
+            overflow: hidden;
+        }
+        #div1_2 ul{
             list-style-position: inside;
+            margin-left: 40px;
+        }
+        #div1_2 ul li{
+            background-color: aqua;
+            margin-top: 45px;
+            width: 90px;
+            list-style: none;
+            padding-left: 11px;
+            padding-right: 11px;
+            border: 1px solid black;
+            float: left;
+        }
+        #div1_2 ul li:first-child{
+            border-radius: 10px 0 0 10px;
+        }
+        #div1_2 ul li:last-child{
+            border-radius: 0 10px 10px 0;
+        }
+        #div1_2 a{
+            text-decoration: none;
+            color: black;
+            font-size: 25px;
+        }
+        .div2{
+            height: 300px;
+            width: 15%;
+            background-color: aliceblue;
+            float: left;
+        }
+        .div2 ol{
+            margin-top: 50%;
+            list-style-position: inside;
+        }
+        .div2 li{
+            padding-bottom: 10px;
+        }
+        .div3{
+            height: 300px;
+            width: 85%;
+            background-color: blueviolet;
+            overflow: hidden;
+            float: left;
+            text-align: center;
+        }
+        .div3 img{
+            height: 300px;
         }
     </style>
 </head>
@@ -44,11 +109,11 @@
         </div>
         <div class="div2">
             <ol>
-                <li><a href="#">메뉴1</a></li>
-                <li><a href="#">메뉴2</a></li>
-                <li><a href="#">메뉴3</a></li>
-                <li><a href="#">메뉴4</a></li>
-                <li><a href="#">메뉴5</a></li>
+                <li><a href="index.html">메뉴1</a></li>
+                <li><a href="page01.html">메뉴2</a></li>
+                <li><a href="page02.html">메뉴3</a></li>
+                <li><a href="page03.html">메뉴4</a></li>
+                <li><a href="page04.html">메뉴5</a></li>
             </ol>
         </div>
         <div class="div3">

@@ -1,3 +1,6 @@
+// 게임정보
+#define GAME_VERSION "디노게임 v0.1 | 202327005 김동현"
+
 // 키
 #define KEY_UP 0x26
 #define KEY_DOWN 0x28
@@ -6,7 +9,6 @@
 #define KEY_N 0x4E
 
 //색상
-
 enum {
     BLACK,
     DARK_BLUE,

@@ -7,6 +7,7 @@ int main()
     Init();
     CursorHide();
     
+    
     RenderTitle();
     do
     {
