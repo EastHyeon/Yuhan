@@ -100,7 +100,6 @@ void RenderTitle(void){
         }
         Sleep(17);
     }
-
 }
 
 int RenderMenu(void){
@@ -329,7 +328,7 @@ int WriteCenter(const char *Str, int y){
 }
 
 int GetCenter(const char *Str){
-        int screenWidth = 88;
+    int screenWidth = 88;
     int len = euc_kr_strlen(Str);
     int xPos = (screenWidth - len) / 2 + 1;
 
