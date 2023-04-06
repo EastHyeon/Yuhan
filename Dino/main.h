@@ -76,3 +76,9 @@ int GetCenter(const char*);
 void ClearLine(int y);
 int euc_kr_strlen(const char*);
 #pragma endregion
+
+#pragma region GAME_DECL
+void Game();
+void InitGame();
+void PrintPlayer(int, int);
+#pragma endregion

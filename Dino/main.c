@@ -18,6 +18,7 @@ int main(){
                 gameState = RenderMenu();
                 break;
             case GAME:
+                Game();
                 break;
             case HELP:
                 gameState = RenderHelp();
