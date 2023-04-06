@@ -18,7 +18,7 @@ int main(){
                 gameState = RenderMenu();
                 break;
             case GAME:
-                Game();
+                gameState = Game();
                 break;
             case HELP:
                 gameState = RenderHelp();
@@ -28,7 +28,7 @@ int main(){
 }
 
 void Init(){
-    system("mode con cols=91 lines=35 | title 디노게임 0.1 | color 70");
+    system("mode con cols=88 lines=35 | title 디노게임 0.1 | color 70");
     CursorHide();
     InitBackGround();
     RenderAuthor();

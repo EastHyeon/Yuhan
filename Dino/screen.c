@@ -3,34 +3,46 @@
 //스크린 영역을 초기화
 void InitScreen(){
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
-    for(int i = SCREEN_MIN_Y; i < SCREEN_MAX_Y; i++){
+    for(int i = SCREEN_MIN_Y; i <= SCREEN_MAX_Y; i++){
         GotoXY(SCREEN_MIN_X,i);
-        printf("                                                                                     ");
+        printf("                                                                                    ");
     }
 }
 
 //스크린 영역을 위에서 아래로 사라지는 효과를 주면서 초기화
 void InitScreenFade(){
-    for(int i = SCREEN_MIN_Y; i < SCREEN_MAX_Y; i++){
+    for(int i = SCREEN_MIN_Y; i <= SCREEN_MAX_Y; i++){
         GotoXY(SCREEN_MIN_X,i);
-        printf("                                                                                     ");
+        printf("                                                                                    ");
+        Sleep(20);
+    }
+}
+//스크린 영역의 색상을 바꾸고 위에서 아래로 사라지는 효과를 주면서 초기화
+void InitScreenFadeColor(int backGroundColor, int textColor){
+    SetAllColor(backGroundColor, textColor);
+    for(int i = SCREEN_MIN_Y; i <= SCREEN_MAX_Y; i++){
+        GotoXY(SCREEN_MIN_X,i);
+        printf("                                                                                    ");
         Sleep(20);
     }
 }
 
 //기본 배경을 초기화
 void InitBackGround(){
+    SetAllColor(GRAY, BLACK);
     GotoXY(0, 0);
-    puts("┌──────────────────────────────────────────────────────────────────────────────────────┐");
+    puts("┌─────────────────────────────────────────────────────────────────────────────────────┐");
     for(int i = 1; i < 30; i++){
-        puts("│                                                                                      │");
+        puts("│                                                                                     │");
     }
-    puts("└──────────────────────────────────────────────────────────────────────────────────────┘");
+    puts("└─────────────────────────────────────────────────────────────────────────────────────┘");
     GotoXY(0, 31);
-    puts("┌──────────────────────────────────────────────────────────────────────────────────────┐");
+    puts("┌─────────────────────────────────────────────────────────────────────────────────────┐");
     for(int i = 0; i < 1; i++){
-        puts("│                                                                                      │");
+        puts("│                                                                                     │");
     }
-    puts("└──────────────────────────────────────────────────────────────────────────────────────┘");
+    puts("└─────────────────────────────────────────────────────────────────────────────────────┘");
     WriteLineCenter(GAME_VERSION, 32);
+    SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
+    InitScreen();
 }

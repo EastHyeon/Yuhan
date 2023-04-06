@@ -8,9 +8,9 @@
 #define GAME_VERSION "디노게임 v0.1 | 202327005 김동현" 
 #define WAIT_TICK 1000 / 30
 #define SCREEN_MIN_X 2
-#define SCREEN_MAX_X 86
+#define SCREEN_MAX_X 85
 #define SCREEN_MIN_Y 1
-#define SCREEN_MAX_Y 30
+#define SCREEN_MAX_Y 29
 
 //화면 선택을 위한 enum
 enum GameState{
@@ -19,14 +19,6 @@ enum GameState{
     GAME,
     HELP,
 };
-
-// 키
-#define KEY_UP 0x26
-#define KEY_DOWN 0x28
-#define KEY_SPACE 0x20
-#define KEY_Y 0x59
-#define KEY_N 0x4E
-#define INPUT_SENSITIVITY 100 // 입력 감도
 
 //텍스트 및 배경 색상 지정을 위한 enum
 enum {
@@ -51,9 +43,31 @@ enum {
 };
 #pragma endregion
 
+#pragma region KEY
+// 키
+#define KEY_UP 0x26
+#define KEY_LEFT 0x25
+#define KEY_DOWN 0x28
+#define KEY_RIGHT 0x27
+
+#define KEY_W 0x57
+#define KEY_A 0x41
+#define KEY_S 0x53
+#define KEY_D 0x44
+
+#define KEY_SPACE 0x20
+
+#define KEY_Y 0x59
+#define KEY_N 0x4E
+#define KEY_ESCAPE 0x1B
+
+#define INPUT_SENSITIVITY 100 // 입력 감도
+#pragma endregion
+
 #pragma region SCREEN_DECL
 void InitScreen(void);
 void InitScreenFade(void);
+void InitScreenFadeColor(int, int);
 void InitBackGround(void);
 #pragma endregion
 
@@ -73,12 +87,26 @@ void SetAllColor(int, int);
 int WriteCenter(const char*, int );
 int WriteLineCenter(const char*, int );
 int GetCenter(const char*);
-void ClearLine(int y);
+void ClearLine(int);
+void ClearLineColor(int, int, int);
 int euc_kr_strlen(const char*);
 #pragma endregion
 
 #pragma region GAME_DECL
-void Game();
+int Game();
 void InitGame();
-void PrintPlayer(int, int);
+void PrintPlayer(int, int, int);
+int GamePause();
+void RenderGame(void);
+void PrintLog(const char*);
+
+#define PLAYER_SPEED 50
+
+struct Player{
+    int posX;
+    int posY;
+    int hp;
+    int direction;
+};
+
 #pragma endregion

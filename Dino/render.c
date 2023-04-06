@@ -1,13 +1,7 @@
 #include "main.h"
 
 void RenderAuthor(){
-    SetAllColor(DARK_GRAY, BLACK);
-    
-    for(int i = SCREEN_MIN_Y; i < SCREEN_MAX_Y; i++){
-        GotoXY(SCREEN_MIN_X,i);
-        printf("                                                                                     ");
-        Sleep(20);
-    }
+    InitScreenFadeColor(DARK_GRAY, BLACK);
 
     SetAllColor(DARK_GRAY, GREEN);
     WriteLineCenter(" __ __ _____ _____ _____ _____    _____ _____ _____ _____ ", 13);
@@ -39,9 +33,9 @@ void RenderTitle(void){
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 11); Sleep(40);
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
 
-    WriteLineCenter("~ C언어 과제로 만듦 ~", 13);
-    WriteLineCenter("-----------------------------------------------------------------------", 14);
-    WriteLineCenter("----------------------------------------------------------------------", 15);
+    WriteLineCenter("___________________________________________________________________________", 12);
+
+    WriteLineCenter("~ C언어 과제로 만듦 ~", 14);
 
     int count;
     while(1){
@@ -53,16 +47,16 @@ void RenderTitle(void){
 
         //깜빡거리는 효과
         count++;
-        if(count>50){
+        if(count>40){
             SetColor(GREEN);
-            WriteLineCenter(">> 스페이스바를 눌러서 시작 <<", 18);
+            WriteLineCenter(">> 스페이스바를 눌러서 시작 <<", 21);
             SetColor(DEFAULT_TEXT);
             count = 0;
         }
 
         count++;
-        if(count>50){
-            WriteLineCenter("                              ", 18);
+        if(count>40){
+            WriteLineCenter("                              ", 21);
             count = 0;
         }
         Sleep(17);
@@ -71,6 +65,7 @@ void RenderTitle(void){
 
 enum GameState RenderMenu(){
     InitScreen();
+    InitBackGround();
 
     //로고 출력
     SetAllColor(BLACK, WHITE);
@@ -85,7 +80,6 @@ enum GameState RenderMenu(){
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 11);
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
 
-    int count = 0;
     static int choose = 1;
     int xPos = GetCenter("시작") - 2;
 
@@ -104,17 +98,21 @@ enum GameState RenderMenu(){
 
         //Input 패스
         // 위 방향키가 눌렸을 때
-        if((GetAsyncKeyState(KEY_UP) & 0x8000  ) && (choose > 1)){
+        if(GetAsyncKeyState(KEY_W) & 0x8000 || GetAsyncKeyState(KEY_UP) & 0x8000){
             if(currentTick - lastInputTick > sensitivity){
                 choose--;
+                if(choose < 1)
+                    choose = 3;
                 processingInput = true;
                 lastInputTick = currentTick;
             }
         }
         // 아래 방향키가 눌렀을 때
-        else if((GetAsyncKeyState(KEY_DOWN) & 0x8000 ) && (choose < 3)){
+        else if(GetAsyncKeyState(KEY_S) & 0x8000 || GetAsyncKeyState(KEY_DOWN) & 0x8000){
             if(currentTick - lastInputTick > sensitivity){
                 choose++;
+                if(choose > 3)
+                    choose = 1;
                 processingInput = true;
                 lastInputTick = currentTick;
             }
