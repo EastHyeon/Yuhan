@@ -1,4 +1,4 @@
-#include "inc\utills.h"
+#include "main.h"
 
 void GotoXY(int x, int y){
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -13,21 +13,19 @@ void CursorHide(void){
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
-/* TEXT UTILLS */
-
-void SetColor(int textColor){
+void SetColor(int TextColor){
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(handle, (DEFAULT_BACKGROUND<<4) + textColor);
+    SetConsoleTextAttribute(handle, (DEFAULT_BACKGROUND<<4) + TextColor);
 }
 
-void SetAllColor(int backGroundColor, int textColor){
+void SetAllColor(int BackGroundColor, int TextColor){
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(handle, (backGroundColor<<4) + textColor);
+    SetConsoleTextAttribute(handle, (BackGroundColor<<4) + TextColor);
 }
 
-int WriteCenter(const char* str, int y){
+int WriteCenter(const char *Str, int y){
     int screenWidth = 88;
-    int len = euc_kr_strlen(str);
+    int len = euc_kr_strlen(Str);
     int xPos = (screenWidth - len) / 2 + 1;
 
     if(xPos <2){
@@ -35,13 +33,13 @@ int WriteCenter(const char* str, int y){
     }
 
     GotoXY(xPos, y);
-    printf("%s", str);
+    printf("%s", Str);
     return xPos;
 }
 
-int WriteLineCenter(const char* str, int y){
+int WriteLineCenter(const char *Str, int y){
     int screenWidth = 88;
-    int len = euc_kr_strlen(str);
+    int len = euc_kr_strlen(Str);
     int xPos = (screenWidth - len) / 2 + 1;
 
     if(xPos <2){
@@ -49,14 +47,13 @@ int WriteLineCenter(const char* str, int y){
     }
 
     GotoXY(xPos, y);
-    printf("%s\n", str);
+    printf("%s\n", Str);
     return xPos;
 }
 
-
-int GetCenter(const char* str){
+int GetCenter(const char *Str){
     int screenWidth = 88;
-    int len = euc_kr_strlen(str);
+    int len = euc_kr_strlen(Str);
     int xPos = (screenWidth - len) / 2 + 1;
 
     if(xPos <2){
@@ -70,7 +67,7 @@ void ClearLine(int y){
     printf("                                                                                     ");
 }
 
-int euc_kr_strlen(const char* str) {
+int euc_kr_strlen(const char *str) {
     int length = 0;
     while (*str) {
         if ((*str & 0x80) != 0) { // 상위 비트가 1인 경우

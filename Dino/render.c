@@ -1,4 +1,4 @@
-#include "inc\render.h"
+#include "main.h"
 
 void Renderer(int state){
     enum GameState gameState = state;
@@ -33,7 +33,7 @@ void RenderAuthor(){
 }
 
 void RenderMenu(){
-    ClearScreen();
+    InitScreen();
     SetAllColor(BLACK, WHITE);
     WriteLineCenter(":::::::::::::::::::::::::::::::::::::::::", 3);
     WriteLineCenter("::'########::'####:'##::: ##::'#######:::", 4);

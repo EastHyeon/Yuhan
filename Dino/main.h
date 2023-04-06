@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <windows.h>
+#include <string.h>
+#include <stdbool.h>
+
+#pragma region DATA_DECL
 // 게임정보
 #define GAME_VERSION "디노게임 v0.1 | 202327005 김동현" 
 #define WAIT_TICK 1000 / 30
@@ -42,3 +48,29 @@ enum {
     DEFAULT_BACKGROUND = 0,
     DEFAULT_TEXT = 7,
 };
+#pragma endregion
+
+#pragma region SCREEN_DECL
+void InitScreen(void);
+void InitBackGround(void);
+#pragma endregion
+
+#pragma region RENDER_DECL
+void Renderer(int);
+
+void RenderTitle(void);
+void RenderAuthor(void);
+void RenderMenu(void);
+#pragma endregion
+
+#pragma region UTILL_DECL
+void GotoXY(int, int);
+void CursorHide(void);
+void SetColor(int);
+void SetAllColor(int, int);
+int WriteCenter(const char*, int );
+int WriteLineCenter(const char*, int );
+int GetCenter(const char*);
+void ClearLine(int y);
+int euc_kr_strlen(const char*);
+#pragma endregion

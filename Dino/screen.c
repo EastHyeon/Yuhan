@@ -1,6 +1,7 @@
-#include "inc\screen.h"
+#include "main.h"
 
-void ClearScreen(){
+//스크린 영역을 비웁니다.
+void InitScreen(){
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
     for(int i = 1; i < 30; i++){
         GotoXY(2,i);
@@ -8,7 +9,8 @@ void ClearScreen(){
     }
 }
 
-void InitScreen(){
+//기본 배경을 초기화합니다.
+void InitBackGround(){
     GotoXY(0, 0);
     puts("┌──────────────────────────────────────────────────────────────────────────────────────┐");
     for(int i = 1; i < 30; i++){
