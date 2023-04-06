@@ -5,34 +5,55 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>간단한 페이지 만들기</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        .total{
+            width: 1000px;
+            background-color: red;
+            margin: auto;
+        }
+        .div1{
+            height: 150px;
+            background-color: aliceblue;
+        }
+        ul{
+            list-style-position: inside;
+        }
+    </style>
 </head>
 <body>
-    <div class="div1">
-        <div id="div1_1">
-            <img src="https://www.yuhan.ac.kr/ibuilder/template/theme_skin/theme900/images/introduce/img_school_k.png"
-            alt="유한대학교 로고">
+    <div class="total">
+        <div class="div1">
+            <div id="div1_1" target="_blank">
+                <a href="https://www.yuhan.ac.kr/">
+                    <img src="https://www.yuhan.ac.kr/ibuilder/template/theme_skin/theme900/images/introduce/img_school_k.png" alt="�쑀�븳����븰援�">
+                </a>
+            </div>
+            <div id="div1_2">
+                <ul>
+                    <li><a href="#">menu1</a></li>
+                    <li><a href="#">menu2</a></li>
+                    <li><a href="#">menu3</a></li>
+                    <li><a href="#">menu4</a></li>
+                    <li><a href="#">menu5</a></li>
+                </ul>
+            </div>
         </div>
-        <div id="div1_2">
-            <ul>
-                <li><a href="#">menu1</a></li>
-                <li><a href="#">menu2</a></li>
-                <li><a href="#">menu3</a></li>
-                <li><a href="#">menu4</a></li>
-                <li><a href="#">menu5</a></li>
-            </ul>
+        <div class="div2">
+            <ol>
+                <li><a href="#">메뉴1</a></li>
+                <li><a href="#">메뉴2</a></li>
+                <li><a href="#">메뉴3</a></li>
+                <li><a href="#">메뉴4</a></li>
+                <li><a href="#">메뉴5</a></li>
+            </ol>
         </div>
-    </div>
-    <div class="div2">
-        <ol>
-            <li><a href="#">메뉴1</a></li>
-            <li><a href="#">메뉴2</a></li>
-            <li><a href="#">메뉴3</a></li>
-            <li><a href="#">메뉴4</a></li>
-            <li><a href="#">메뉴5</a></li>
-        </ol>
-    </div>
-    <div class="div3">
-        <img src="sky.do" alt="하늘">
+        <div class="div3">
+            <img src="sky.do" alt="하늘">
+        </div>
     </div>
 </body>
 </html>
