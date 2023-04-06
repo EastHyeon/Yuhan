@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>절대(엄마가 꼭 있어야...아이) 배치</title>
+    <style>
+        div{
+            display: inline-block;
+            /* 절대 배치 */
+            /*position: absolute;*/
+            position: relative;
+            border: 1px solid lightgray;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+        }
+        div>p{
+            display: inline-block;
+            position: absolute;
+            height: 20px;
+            width: 15px;
+            background-color: lightgray;
+        }
+        /* 아이디 셀렉터 */
+        #p1{
+          left: 50px;
+          top: 30px;  
+        }
+        #p2{
+            left: 100px;
+            top: 0px;
+        }
+        #p3{
+            left: 100px;
+            top: 80px;
+        }
+        #p4{
+            left: 150px;
+            top: 110px;
+        }
+        #p5{
+            left: 30px;
+            top: 130px;
+        }
+        #fixed{
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 100px;
+            /* 테두리 안쪽 영역에 5px*/
+            padding: 5px;
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h3>Merry Christmas!</h3>
+    <hr>
+    <p>예수님이 탄생하셨습니다.</p>
+    <div>
+        <!-- alt 이미지가 안 보일 때 나오는 글씨 -->
+        <img src="image/christmastree.png" alt="크리스마스 트리">
+        <p id="p1">M</p>
+        <p id="p2">E</p>
+        <p id="p3">R</p>
+        <p id="p4">R</p>
+        <p id="p5">Y</p>
+    </div>
+    <div id="fixed">예수님이 탄생하셨습니다.</div>
+</body>
+</html>
