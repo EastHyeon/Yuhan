@@ -4,14 +4,6 @@
 #include <conio.h>
 #include <stdlib.h>
 
-#define WAIT 0
-#define UP 1
-#define DOWN 2
-#define LEFT 3
-#define RIGHT 4
-#define JUMP 5
-#define EXIT 6
-
 struct Player{
     bool isDead;
     bool isGrounded;

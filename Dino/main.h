@@ -8,20 +8,22 @@
 #define GAME_VERSION "디노게임 v0.1 | 202327005 김동현" 
 #define WAIT_TICK 1000 / 30
 #define SCREEN_MIN_X 2
-#define SCREEN_MAX_X 85
+#define SCREEN_MAX_X 84
 #define SCREEN_MIN_Y 1
-#define SCREEN_MAX_Y 29
+#define SCREEN_MAX_Y 30
 
 //화면 선택을 위한 enum
 enum GameState{
     EXIT = 0,
     MENU,
-    GAME,
     HELP,
+    GAME,
+    DINO,
+    MAZE
 };
 
 //텍스트 및 배경 색상 지정을 위한 enum
-enum {
+enum ConsoleColor{
     BLACK,
     DARK_BLUE,
     DARK_GREEN,
@@ -38,8 +40,8 @@ enum {
     VIOLET,
     YELLOW,
     WHITE,
-    DEFAULT_BACKGROUND = 0,
-    DEFAULT_TEXT = 7,
+    DEFAULT_BACKGROUND = BLACK,
+    DEFAULT_TEXT = GRAY,
 };
 #pragma endregion
 
@@ -75,8 +77,9 @@ void InitBackGround(void);
 void RenderTitle(void);
 void RenderAuthor(void);
 void RenderTitle(void);
-enum GameState RenderMenu(void);
-enum GameState RenderHelp(void);
+enum GameState GameMenu(void);
+enum GameState MainMenu(void);
+enum GameState HelpMenu(void);
 #pragma endregion
 
 #pragma region UTILL_DECL
@@ -93,20 +96,42 @@ int euc_kr_strlen(const char*);
 #pragma endregion
 
 #pragma region GAME_DECL
-int Game();
-void InitGame();
-void PrintPlayer(int, int, int);
-int GamePause();
-void RenderGame(void);
+void PrintPos(int, int);
 void PrintLog(const char*);
 
+enum GameState Dino_Game();
+void Dino_InitGame();
+void Dino_PrintPlayer(int, int, int);
+int Dino_GamePause();
+void Dino_RenderGame(void);
+
+enum GameState Maze_Game();
+void Maze_InitGame();
+void Maze_PrintPlayer(int, int, int);
+int Maze_GamePause();
+void Maze_RenderGame(void);
+
+
 #define PLAYER_SPEED 50
+#define PHYSIC_TICK 1000 / 30
+#define GROUND_HEIGHT 28
+#define MAX_JUMP_HEIGHT GROUND_HEIGHT - 5
+
+enum TileType{
+    EMPTY,
+    WALL,
+    PLAYER,
+};
+
+enum ConsoleColor GetTileColor(enum TileType);
 
 struct Player{
     int posX;
     int posY;
     int hp;
     int direction;
+    bool isGrounded;
+    bool isJumping;
 };
 
 #pragma endregion
