@@ -6,7 +6,7 @@ enum GameState Maze_Game() {
 
 
     player.posX = 0;
-    player.posY = GROUND_HEIGHT;
+    player.posY = 0;
 
     int Score = 0;
 
@@ -42,19 +42,19 @@ enum GameState Maze_Game() {
                      if(player.posY >= SCREEN_MIN_Y)
                          player.posY--;
             }
-            if (GetAsyncKeyState(KEY_A) & 0x8000 || GetAsyncKeyState(KEY_LEFT) & 0x8000) {
+            else if (GetAsyncKeyState(KEY_A) & 0x8000 || GetAsyncKeyState(KEY_LEFT) & 0x8000) {
                 PrintLog("왼쪽 방향키 눌림");
                 player.direction = 1;
                 if (player.posX > 0)
                     player.posX--;
             }
-            if (GetAsyncKeyState(KEY_S) & 0x8000 || GetAsyncKeyState(KEY_DOWN) & 0x8000) {
+            else if (GetAsyncKeyState(KEY_S) & 0x8000 || GetAsyncKeyState(KEY_DOWN) & 0x8000) {
                  PrintLog("아래쪽 방향키 눌림");
                  player.direction = 2;
                  if(player.posY < SCREEN_MAX_Y - 1)
                      player.posY++;            
             }
-            if (GetAsyncKeyState(KEY_D) & 0x8000 || GetAsyncKeyState(KEY_RIGHT) & 0x8000) {
+            else if (GetAsyncKeyState(KEY_D) & 0x8000 || GetAsyncKeyState(KEY_RIGHT) & 0x8000) {
                 PrintLog("오른쪽 방향키 눌림");
                 player.direction = 3;
                 if (player.posX < SCREEN_MAX_X / 2 - 1)

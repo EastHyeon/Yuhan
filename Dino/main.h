@@ -116,7 +116,7 @@ int Maze_GamePause();
 void Maze_RenderGame(void);
 
 
-#define PLAYER_SPEED 1000 / 8
+#define PLAYER_SPEED 1000 / 10
 #define PHYSICS_TICK 1000 / 30
 #define GROUND_HEIGHT 28
 #define MAX_JUMP_HEIGHT GROUND_HEIGHT - 10

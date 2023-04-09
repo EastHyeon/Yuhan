@@ -52,7 +52,7 @@ enum GameState Dino_Game(){
                 if(player.posX > 0)
                     player.posX--;      
             }
-            if (GetAsyncKeyState(KEY_S) & 0x8001 || GetAsyncKeyState(KEY_DOWN) & 0x8001 ){
+            if (GetAsyncKeyState(KEY_S) & 0x8000 || GetAsyncKeyState(KEY_DOWN) & 0x8000 ){
                 PrintLog("아래쪽 방향키 눌림");
                 isDown = !isDown;
             }
@@ -197,8 +197,8 @@ enum GameState Dino_Game(){
             }
             else if (random == 4) {
                 for (int i = 0; i < 6; i++) {
-                    for (int x = 0; x < 6; x++) {
-                        if (TreeX > SCREEN_MIN_X + 2) {
+                    for (int x = 0; x < 3; x++) {
+                        if (TreeX > SCREEN_MIN_X + 1) {
                             if (Tile[GROUND_HEIGHT - i][TreeX - x] == PLAYER) {
                                 return Dino_ScoreScreen(Score);
                             }
@@ -210,13 +210,15 @@ enum GameState Dino_Game(){
                 }
             }
             else if (random == 5) {
-                for (int i = 0; i < 4; i++) {
-                    if (TreeX > SCREEN_MIN_X) {
-                        if (Tile[24][TreeX - i] == PLAYER) {
-                            return Dino_ScoreScreen(Score);
-                        }
-                        else {
-                            Tile[24][TreeX - i] = TREE;
+                for (int i = 0; i < 6; i++) {
+                    for (int x = 0; x < 3; x++) {
+                        if (TreeX > SCREEN_MIN_X + 1) {
+                            if (Tile[GROUND_HEIGHT - i - 4][TreeX - x] == PLAYER) {
+                                return Dino_ScoreScreen(Score);
+                            }
+                            else {
+                                Tile[GROUND_HEIGHT - i - 4][TreeX - x] = TREE;
+                            }
                         }
                     }
                 }
