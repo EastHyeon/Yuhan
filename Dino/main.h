@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #pragma region DATA_DECL
 // 게임정보
@@ -102,8 +103,11 @@ void PrintLog(const char*);
 enum GameState Dino_Game();
 void Dino_InitGame();
 void Dino_PrintPlayer(int, int, int);
+int Dino_ScoreScreen(int);
 int Dino_GamePause();
 void Dino_RenderGame(void);
+
+void PrintScore(int);
 
 enum GameState Maze_Game();
 void Maze_InitGame();
@@ -112,14 +116,15 @@ int Maze_GamePause();
 void Maze_RenderGame(void);
 
 
-#define PLAYER_SPEED 50
-#define PHYSIC_TICK 1000 / 30
+#define PLAYER_SPEED 1000 / 8
+#define PHYSICS_TICK 1000 / 30
 #define GROUND_HEIGHT 28
-#define MAX_JUMP_HEIGHT GROUND_HEIGHT - 5
+#define MAX_JUMP_HEIGHT GROUND_HEIGHT - 10
 
 enum TileType{
     EMPTY,
     WALL,
+    TREE,
     PLAYER,
 };
 
