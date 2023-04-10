@@ -16,18 +16,12 @@ int main(){
     int xPos = WriteLineCenter("디버그 모드로 실행합니까? (Y/N)", 17);
     while(1){
         if(GetAsyncKeyState(KEY_Y) & 0x8000){
-            GotoXY(xPos, 17);
-            printf("                                "); 
-            GotoXY(xPos, 17);
-            printf("디버그 모드로 진입합니다.");
+            WriteLineCenter("일반 모드로 진입합니다.", 32);
             DebugMode = true;
             break;
         }
         else if(GetAsyncKeyState(KEY_N) & 0x8000){
-            GotoXY(xPos, 17);
-            printf("                                "); 
-            GotoXY(xPos, 17);
-            printf("일반 모드로 진입합니다.");
+            WriteLineCenter("일반 모드로 진입합니다.", 32);
             DebugMode = false;
             break;
         }
