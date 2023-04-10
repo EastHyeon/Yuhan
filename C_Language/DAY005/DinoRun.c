@@ -27,6 +27,7 @@ int main(){
 
     while (game_state != 0)
     {
+        //화면 비우기
         system("cls");
         // input 변수에 입력 값을 받는다.
         // game_state에 따라 출력할 메뉴를 결정한다.

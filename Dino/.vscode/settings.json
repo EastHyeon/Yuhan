@@ -5,5 +5,6 @@
         "render.h": "c",
         "utills.h": "c",
         "windows.h": "c"
-    }
+    },
+    "files.encoding": "euckr"
 }

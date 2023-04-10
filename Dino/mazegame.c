@@ -80,6 +80,23 @@ enum GameState Maze_Game() {
                 Tile[y][x] = EMPTY;
             }
         }
+
+        RenderX = 0;
+        for (int y = 0; y < SCREEN_MAX_Y; y++) {
+            for (int x = 0; x < SCREEN_MAX_X; x++) {
+                if(RenderX % 2 == 0 || y % 2 == 0){
+                    Tile[y][RenderX] = WALL;
+                }
+                else{
+                    Tile[y][RenderX] = EMPTY;
+                }
+                RenderX++;
+            }
+            RenderX = 0;
+        }
+
+        Tile[0][0] = PLAYER;
+
         if(player.posY < SCREEN_MAX_Y && player.posX < (SCREEN_MAX_X) / 2 + 1)
             Tile[player.posY][player.posX] = PLAYER;
 
@@ -87,11 +104,10 @@ enum GameState Maze_Game() {
 
         SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
         //Render 패스
-        RenderX = 0;
-        for (int y = 0; y < SCREEN_MAX_Y; y++) {
-            for (int x = 0; x < SCREEN_MAX_X; x++) {
+        for(int y = 0; y < SCREEN_MAX_Y; y++){
+            for(int x = 0; x < SCREEN_MAX_X; x++){
                 // X좌표가 짝수일 때만 출력 (출력되는 모습을 정사각형으로 맞추기 위해)
-                if (x == 0 || x % 2 == 0) {
+                if(x == 0 || x % 2 == 0){
                     GotoXY(x + SCREEN_MIN_X, y + SCREEN_MIN_Y);
                     SetAllColor(GetTileColor(Tile[y][RenderX]), DEFAULT_TEXT);
                     printf("  ");
