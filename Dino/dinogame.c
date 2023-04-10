@@ -17,7 +17,6 @@ enum GameState Dino_Game(){
     int lastFrameTick = 0;
     int lastAnimationTick = 0;
     int lastScoreTick = 0;
-    int sensitivity = INPUT_SENSITIVITY;
 
     bool legFlag = true;
     bool isDown = false;
@@ -29,16 +28,16 @@ enum GameState Dino_Game(){
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
 
     bool playerIsAtk = 0;
-    bool State = true;
     player.direction = 3;
-    while(State){
-        int currentTick = GetTickCount64();
+
+    while(1){
+        int currentTick = GetTickCount();
         if(currentTick - lastFrameTick < WAIT_TICK)
             continue;
         lastFrameTick = currentTick;
 #pragma region INPUT
         //Input && Logics 패스
-        if(currentTick - lastInputTick > PLAYER_SPEED){
+        if(currentTick - lastInputTick > INPUT_SENSITIVITY){
             PrintLog("입력 대기 중");
             if (GetAsyncKeyState(KEY_W) & 0x8000 || GetAsyncKeyState(KEY_UP) & 0x8000){
                 // PrintLog("위 방향키 눌림");
@@ -52,9 +51,12 @@ enum GameState Dino_Game(){
                 if(player.posX > 0)
                     player.posX--;      
             }
-            if (GetAsyncKeyState(KEY_S) & 0x8000 || GetAsyncKeyState(KEY_DOWN) & 0x8000 ){
+            if (GetAsyncKeyState(KEY_S) & 0x8001  || GetAsyncKeyState(KEY_DOWN) & 0x8000 ){
                 PrintLog("아래쪽 방향키 눌림");
-                isDown = !isDown;
+                isDown = true;
+            }
+            else{
+                isDown = false;
             }
             if (GetAsyncKeyState(KEY_D) & 0x8000 || GetAsyncKeyState(KEY_RIGHT) & 0x8000){
                 PrintLog("오른쪽 방향키 눌림");
@@ -184,13 +186,12 @@ enum GameState Dino_Game(){
             else if (random == 3) {
                 for (int i = 0; i < 2; i++) {
                     for (int x = 0; x < 3; x++) {
-                        if (TreeX > SCREEN_MIN_X - 1){
-                            if (Tile[GROUND_HEIGHT - i][TreeX - x] == PLAYER) {
-                                return Dino_ScoreScreen(Score);
-                            }
-                            else {
-                                Tile[GROUND_HEIGHT - i][TreeX - x] = TREE;
-                            }
+                        if (Tile[GROUND_HEIGHT - i][TreeX + x] == PLAYER) {
+                            return Dino_ScoreScreen(Score);
+                        }
+                        else {
+                            if(TreeX + x >= 0)
+                                Tile[GROUND_HEIGHT - i][TreeX + x] = TREE;
                         }
                     }
                 }
@@ -198,13 +199,12 @@ enum GameState Dino_Game(){
             else if (random == 4) {
                 for (int i = 0; i < 6; i++) {
                     for (int x = 0; x < 3; x++) {
-                        if (TreeX > SCREEN_MIN_X + 1) {
-                            if (Tile[GROUND_HEIGHT - i][TreeX - x] == PLAYER) {
-                                return Dino_ScoreScreen(Score);
-                            }
-                            else {
-                                Tile[GROUND_HEIGHT - i][TreeX - x] = TREE;
-                            }
+                        if (Tile[GROUND_HEIGHT - i][TreeX + x] == PLAYER) {
+                            return Dino_ScoreScreen(Score);
+                        } 
+                        else {
+                            if(TreeX + x >= 0)
+                                Tile[GROUND_HEIGHT - i][TreeX + x] = TREE;
                         }
                     }
                 }
@@ -212,20 +212,23 @@ enum GameState Dino_Game(){
             else if (random == 5) {
                 for (int i = 0; i < 6; i++) {
                     for (int x = 0; x < 3; x++) {
-                        if (TreeX > SCREEN_MIN_X + 1) {
-                            if (Tile[GROUND_HEIGHT - i - 4][TreeX - x] == PLAYER) {
-                                return Dino_ScoreScreen(Score);
-                            }
-                            else {
-                                Tile[GROUND_HEIGHT - i - 4][TreeX - x] = TREE;
-                            }
+                        if (Tile[GROUND_HEIGHT - i - 4][TreeX + x] == PLAYER) {
+                            return Dino_ScoreScreen(Score);
+                        }
+                        else {
+                            if(TreeX + x >= 0)
+                                Tile[GROUND_HEIGHT - i - 4][TreeX + x] = TREE;
                         }
                     }
                 }
             }
         }
 
-
+        if (currentTick - lastScoreTick > 2000) {
+            Score++;
+            PrintScore(Score);
+            lastScoreTick = currentTick;
+        }
 
         PrintPos(player.posX, player.posY);
 
@@ -238,16 +241,11 @@ enum GameState Dino_Game(){
                 if(x == 0 || x % 2 == 0){
                     GotoXY(x + SCREEN_MIN_X, y + SCREEN_MIN_Y);
                     SetAllColor(GetTileColor(Tile[y][RenderX]), DEFAULT_TEXT);
-                    printf("  ");
+                    printf("  "); 
                     RenderX++;
                 }
             }
             RenderX = 0;
-        }
-        if (currentTick - lastScoreTick > 2000) {
-            Score++;
-            PrintScore(Score);
-            lastScoreTick = currentTick;
         }
     }
     return 1;
@@ -255,6 +253,7 @@ enum GameState Dino_Game(){
 
 void Dino_InitGame(){
     InitScreen();
+
     for(int i = 0; i < 3; i++){
         ClearLineColor(i + 33, GRAY, BLACK);
     }
@@ -268,6 +267,8 @@ int Dino_ScoreScreen(int score) {
     int choose = 1;
     int xPos = GetCenter("다시 시작") - 2;
 
+    static int highestScore = 0;
+
 
     //프레임 제한을 위한 변수
     int lastTick = 0;
@@ -277,29 +278,46 @@ int Dino_ScoreScreen(int score) {
     bool processingInput = false;
     int boxCenter = GetCenter("                                        ");
     SetAllColor(DARK_RED, DEFAULT_TEXT);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 11; i++) {
         GotoXY(boxCenter, i + 10);
-        printf("                                        ");
+        printf("                                        "); Sleep(30);
     }
     SetAllColor(DARK_RED, WHITE);
-    WriteLineCenter("GAME OVER", 11);
+    WriteLineCenter("GAME OVER", 11); Sleep(30);
 
     SetAllColor(DARK_RED, YELLOW);
+    if (highestScore < score){
+        highestScore = score;
+        WriteLineCenter("최고기록 갱신!", 16); Sleep(30);
+    }
 
     char buffer[256];
-    sprintf_s(buffer, sizeof(buffer), "Score: %d", score);
+    sprintf_s(buffer, sizeof(buffer), "Highest Score: %d", highestScore);
     char* msg = buffer;
-    if (score < 10) {
+    if (highestScore < 10){
         GotoXY(GetCenter(msg) - 1, 13);
         printf(msg);
     }
     else
         WriteLineCenter(msg, 13);
 
+    Sleep(30);
+
+    sprintf_s(buffer, sizeof(buffer), "Score: %d", score);
+    msg = buffer;
+    if (score < 10) {
+        GotoXY(GetCenter(msg) - 1, 14);
+        printf(msg);
+    }
+    else
+        WriteLineCenter(msg, 14);
+
+    Sleep(30);
+
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
     while (1) {
         //프레임 관리 30프레임으로 고정
-        int currentTick = GetTickCount64();
+        int currentTick = GetTickCount();
         if (currentTick - lastTick < WAIT_TICK)
             continue;
         lastTick = currentTick;
@@ -330,25 +348,25 @@ int Dino_ScoreScreen(int score) {
                 {
                 case 1:
                     SetAllColor(DARK_RED, GREEN);
-                    WriteLineCenter("게임으로 돌아갑니다.", 17);
+                    WriteLineCenter("게임으로 돌아갑니다.", 18);
                     PrintLog("다시 시작");
                     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
                     Sleep(500);
                     return DINO;
                 case 2:
                     SetAllColor(DARK_RED, GREEN);
-                    WriteLineCenter("정말 메뉴로 돌아갑니까? (Y/N)", 18);
+                    WriteLineCenter("정말 메뉴로 돌아갑니까? (Y/N)", 19);
                     while (1) {
                         if (GetAsyncKeyState(KEY_Y) & 0x8000) {
-                            WriteLineCenter("                              ", 18);
-                            WriteLineCenter("메뉴로 돌아갑니다.", 18);
+                            WriteLineCenter("                              ", 19);
+                            WriteLineCenter("메뉴로 돌아갑니다.", 19);
                             PrintLog("메뉴로 이동");
                             Sleep(500);
                             SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
                             return MENU;
                         }
                         else if (GetAsyncKeyState(KEY_N) & 0x8000) {
-                            WriteLineCenter("                              ", 18);
+                            WriteLineCenter("                              ", 19);
                             break;
                         }
                     }
@@ -370,26 +388,26 @@ int Dino_ScoreScreen(int score) {
 
         //메뉴 출력
         SetAllColor(DARK_RED, WHITE);
-        GotoXY(xPos, 17);
-        printf("다시 시작");
         GotoXY(xPos, 18);
+        printf("다시 시작");
+        GotoXY(xPos, 19);
         printf("메뉴로 돌아가기");
 
         //선택되어있는 메뉴 옆에 초록색 커서를 표시함
         if (choose == 1) {
             SetAllColor(DARK_RED, GREEN);
-            GotoXY(xPos - 2, 17);
+            GotoXY(xPos - 2, 18);
             printf(">");
             SetAllColor(DARK_RED, WHITE);
-            GotoXY(xPos - 2, 18);
+            GotoXY(xPos - 2, 19);
             printf(" ");
         }
         else if (choose == 2) {
             SetAllColor(DARK_RED, GREEN);
-            GotoXY(xPos - 2, 18);
+            GotoXY(xPos - 2, 19);
             printf(">");
             SetAllColor(DARK_RED, WHITE);
-            GotoXY(xPos - 2, 17);
+            GotoXY(xPos - 2, 18);
             printf(" ");
         }
     }
@@ -415,7 +433,7 @@ int Dino_GamePause(){
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
     while(1){
         //프레임 관리 30프레임으로 고정
-        int currentTick = GetTickCount64();
+        int currentTick = GetTickCount();
         if(currentTick - lastTick < WAIT_TICK)
             continue;
         lastTick = currentTick;

@@ -41,7 +41,7 @@ void PrintScore(int score) {
 enum ConsoleColor GetTileColor(enum TileType type) {
     switch (type) {
     case EMPTY:
-        return DARK_GRAY;
+        return CYAN;
     case WALL:
         return DARK_GREEN;
     case TREE:

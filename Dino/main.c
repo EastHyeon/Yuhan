@@ -12,16 +12,20 @@ int main(){
     system("mode con cols=88 lines=39 | title 디버그 모드");
     CursorHide();
     
+    InitBackGround();
     SetAllColor(BLACK, RED);
-    int xPos = WriteLineCenter("디버그 모드로 실행합니까? (Y/N)", 17);
+    int xPos = WriteLineCenter("디버그 모드로 실행합니까? (Y/N)", 14);
     while(1){
+        
         if(GetAsyncKeyState(KEY_Y) & 0x8000){
-            WriteLineCenter("일반 모드로 진입합니다.", 32);
+            ClearLine(14);
+            WriteLineCenter("디버그 모드로 실행합니다.", 14);
             DebugMode = true;
             break;
         }
         else if(GetAsyncKeyState(KEY_N) & 0x8000){
-            WriteLineCenter("일반 모드로 진입합니다.", 32);
+            ClearLine(14);
+            WriteLineCenter("일반 모드로 실행합니다.", 14);
             DebugMode = false;
             break;
         }
@@ -32,7 +36,7 @@ int main(){
 
     if(DebugMode){
         InitDebug();   
-        gameState = MAZE;
+        gameState = DINO;
     }else{
         Init();
         RenderTitle();

@@ -105,7 +105,6 @@ void Dino_InitGame();
 void Dino_PrintPlayer(int, int, int);
 int Dino_ScoreScreen(int);
 int Dino_GamePause();
-void Dino_RenderGame(void);
 
 void PrintScore(int);
 
@@ -113,7 +112,6 @@ enum GameState Maze_Game();
 void Maze_InitGame();
 void Maze_PrintPlayer(int, int, int);
 int Maze_GamePause();
-void Maze_RenderGame(void);
 
 
 #define PLAYER_SPEED 1000 / 10
