@@ -15,7 +15,7 @@ void RenderAuthor(){
 }
 
 // 처음 타이틀 화면 출력
-void RenderTitle(void){
+void RenderTitle(){
     InitScreenFade();
     SetAllColor(DEFAULT_BACKGROUND, WHITE);
     //로고 출력
