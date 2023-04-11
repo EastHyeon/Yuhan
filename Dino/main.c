@@ -9,7 +9,7 @@ int main(){
     bool DebugMode;
 
     system("cls");
-    system("mode con cols=87 lines=38 | title 디버그 모드");
+    system("mode con cols=87 lines=38 | title 디버그 모드 | Color 70");
     CursorHide();
     
     InitBackGround();
@@ -30,7 +30,7 @@ int main(){
         }
     }
     Sleep(500);
-    system("title 디노게임 0.1 | Color 70");
+    system("title 디노게임 0.1");
 
 
     if(DebugMode){
