@@ -9,7 +9,7 @@ int main(){
     bool DebugMode;
 
     system("cls");
-    system("mode con cols=88 lines=39 | title 디버그 모드");
+    system("mode con cols=87 lines=38 | title 디버그 모드");
     CursorHide();
     
     InitBackGround();
@@ -36,7 +36,7 @@ int main(){
     if(DebugMode){
         InitDebug();   
         gameState = DINO;
-    }else{
+    } else {
         Init();
         RenderTitle();
         gameState = MENU;

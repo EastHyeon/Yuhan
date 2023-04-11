@@ -6,7 +6,7 @@ enum GameState Maze_Game() {
     int RenderX = 0;
     for(int y = 0; y < 25; y++){
         for(int x = 0; x < 25; x++){
-            if(x % 2 == 0 && y % 2 == 0)
+            if(x % 2 == 0 && y % 2 == 0 || x == 0 || y == 0 || x == SCREEN_MAX_X || y == SCREEN_MAX_Y)
                 Tile[y][x] = WALL;
             else
                 Tile[y][x] = EMPTY;
