@@ -118,7 +118,7 @@ enum GameState Dino_Game(){
             Tile[29][x] = WALL;
         }
 
-
+        //print Player
         if(isDown){
             Tile[player.posY - 2][player.posX] = PLAYER;
             Tile[player.posY - 1][player.posX + 1] = PLAYER;
@@ -143,7 +143,7 @@ enum GameState Dino_Game(){
             Tile[player.posY - 4][player.posX + 3] = PLAYER;
         }
 
-
+        // 1000/4 Tick 마다 다리 애니메이션 갱신
         if (currentTick - lastAnimationTick > 1000 / 4) {
             if (legFlag) {
                 legFlag = false;
@@ -152,6 +152,8 @@ enum GameState Dino_Game(){
                 legFlag = true;
             }
             lastAnimationTick = currentTick;
+            if(player.posX > SCREEN_MIN_X)
+                player.posX--;
         }
 
         if (legFlag == 0) {
