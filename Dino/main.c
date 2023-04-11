@@ -35,7 +35,7 @@ int main(){
 
     if(DebugMode){
         InitDebug();   
-        gameState = DINO;
+        gameState = MAZE;
     } else {
         Init();
         RenderTitle();

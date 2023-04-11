@@ -152,8 +152,6 @@ enum GameState Dino_Game(){
                 legFlag = true;
             }
             lastAnimationTick = currentTick;
-            if(player.posX > SCREEN_MIN_X)
-                player.posX--;
         }
 
         if (legFlag == 0) {
