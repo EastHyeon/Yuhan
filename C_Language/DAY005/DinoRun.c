@@ -4,14 +4,6 @@
 #include <conio.h>
 #include <stdlib.h>
 
-#define WAIT 0
-#define UP 1
-#define DOWN 2
-#define LEFT 3
-#define RIGHT 4
-#define JUMP 5
-#define EXIT 6
-
 struct Player{
     bool isDead;
     bool isGrounded;
@@ -35,6 +27,7 @@ int main(){
 
     while (game_state != 0)
     {
+        //화면 비우기
         system("cls");
         // input 변수에 입력 값을 받는다.
         // game_state에 따라 출력할 메뉴를 결정한다.
