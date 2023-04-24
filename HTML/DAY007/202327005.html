@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bluebox</title>
+    <style>
+        div{
+            width: 500px;
+            height: 300px;
+            background-color: blue;
+            position: relative;
+        }
+        div > img{
+            width: 100px;
+            height: 100px;
+            left: 200px;
+            top: 100px;
+            position: absolute;
+            animation: cat 100ms linear infinite; transform-origin: 50% 50%;;
+        }
+
+        @keyframes cat {
+            100% {
+                transform: rotateZ(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <img src="heroes.png" alt="고양이">
+    </div>
+</body>
+</html>

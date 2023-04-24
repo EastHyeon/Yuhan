@@ -1,26 +1,137 @@
 #include "main.h"
 
 enum GameState Maze_Game() {
+    struct Player player = {SCREEN_MIN_X, SCREEN_MIN_Y, 100, 0, .isJumping = false};
     enum TileType Tile[SCREEN_MAX_Y][(SCREEN_MAX_X) / 2 + 1] = {EMPTY};
 
+    int lastInputTick = 0;
+    int lastFrameTick = 0;
+    int lastAnimationTick = 0;
     int RenderX = 0;
-    for(int y = 0; y < 25; y++){
-        for(int x = 0; x < 25; x++){
-            if(x % 2 == 0 && y % 2 == 0)
-                Tile[y][x] = WALL;
-            else
-                Tile[y][x] = EMPTY;
-        }
-    }
 
+    bool isGenerated = false;
+    
+    int score = 0;
+
+    int DestX = 23;
+    int DestY = 23;
+
+    player.posX = 1;
+    player.posY = 1;
+
+    Maze_InitGame();
+
+    //render
     while(1){
+        int currentTick = GetTickCount();
+        if(currentTick - lastFrameTick < WAIT_TICK)
+            continue;
+        lastFrameTick = currentTick;
+
+        if(currentTick - lastInputTick > INPUT_SENSITIVITY){
+            PrintLog("입력 대기 중");
+            if (GetAsyncKeyState(KEY_W) & 0x8000 || GetAsyncKeyState(KEY_UP) & 0x8000){
+                PrintLog("위 방향키 눌림");
+                player.direction = 0;
+                    if(player.posY > SCREEN_MIN_Y  && Tile[player.posY - 1][player.posX] == EMPTY)
+                        player.posY--;
+            }
+            else if (GetAsyncKeyState(KEY_A) & 0x8000 || GetAsyncKeyState(KEY_LEFT) & 0x8000){
+                PrintLog("왼쪽 방향키 눌림");
+                player.direction = 1;
+                if(player.posX > 0  && Tile[player.posY][player.posX - 1] == EMPTY)
+                    player.posX--;      
+            }
+            else if (GetAsyncKeyState(KEY_S) & 0x8001  || GetAsyncKeyState(KEY_DOWN) & 0x8000 ){
+                PrintLog("아래 방향키 눌림");
+                player.direction = 2;
+                    if(player.posY < SCREEN_MAX_Y  && Tile[player.posY + 1][player.posX] == EMPTY)
+                        player.posY++;
+            }
+            else if (GetAsyncKeyState(KEY_D) & 0x8000 || GetAsyncKeyState(KEY_RIGHT) & 0x8000){
+                PrintLog("오른쪽 방향키 눌림");
+                player.direction = 3;
+                if(player.posX < SCREEN_MAX_X / 2 - 4 && Tile[player.posY][player.posX + 1] == EMPTY)
+                    player.posX++;            
+            }
+            if (GetAsyncKeyState(VK_ESCAPE) & 0x8000){
+                if(MENU == Maze_GamePause())
+                    return MENU;
+            }
+            lastInputTick = currentTick;
+        }
+        //logics
+        //Generate Maze
+
+        if(!isGenerated){
+            for(int y = 0; y < 29; y++){
+                for(int x = 0; x < 29; x++){
+                    if(x % 2 == 0 || y % 2 == 0)
+                        Tile[y][x] = WALL;
+                    else
+                        Tile[y][x] = EMPTY;
+                }
+            }
+
+            for(int y = 0; y < 29; y++){
+                int count = 1;
+                for(int x = 0; x < 29; x++){
+                    if(x % 2 == 0 || y % 2 == 0)
+                        continue;
+
+                    if(y == 29 - 2 && x == 29 - 2)
+                        continue;
+
+                    if(y == 29 - 2){
+                        Tile[y][x + 1] = EMPTY;
+                        continue;
+                    }
+
+                    if(x == 29 - 2){
+                        Tile[y + 1][x] = EMPTY;
+                        continue;
+                    }
+                    
+                    if (rand() % 2 == 0){
+                        Tile[y][x + 1] = EMPTY;
+                        count++;
+                    }
+                    else{
+                        int randIndex = rand() % count;
+                        Tile[y + 1][x - randIndex * 2] = EMPTY;
+                        count = 1;
+                    }
+                }
+            }
+            DestX = 29 - 2;
+            DestY = 29 - 2;
+            isGenerated = true;
+        }
+       
+       if(player.posX == DestX && player.posY == DestY){
+            player.posX = 1;
+            player.posY = 1;
+            isGenerated = false;
+            score++;
+       }
+        
+        PrintScore(score);
+        PrintPos(player.posX, player.posY);
         RenderX = 0;
         for(int y = 0; y < SCREEN_MAX_Y; y++){
             for(int x = 0; x < SCREEN_MAX_X; x++){
                 // X좌표가 짝수일 때만 출력 (출력되는 모습을 정사각형으로 맞추기 위해)
                 if(x == 0 || x % 2 == 0){
-                    GotoXY(x + SCREEN_MIN_X, y + SCREEN_MIN_Y);
-                    SetAllColor(GetTileColor(Tile[y][RenderX]), DEFAULT_TEXT);
+                    if(y == player.posY && RenderX == player.posX){
+                        SetAllColor(GREEN, DEFAULT_TEXT);
+                    }
+                    else if(y == DestY && RenderX == DestX){
+                        SetAllColor(YELLOW, DEFAULT_TEXT);
+                    } 
+                    else {
+                        GotoXY(x + SCREEN_MIN_X, y + SCREEN_MIN_Y);
+                        SetAllColor(GetTileColor(Tile[y][RenderX]), DEFAULT_TEXT);
+                    }
                     printf("  "); 
                     RenderX++;
                 }
@@ -32,7 +143,7 @@ enum GameState Maze_Game() {
 
 void Maze_InitGame() {
     InitScreen();
-    for (int i = 0; i < 3; i++) {
+    for(int i = 0; i < 3; i++){
         ClearLineColor(i + 33, GRAY, BLACK);
     }
     PrintPos(0, 0);
@@ -62,7 +173,7 @@ int Maze_GamePause() {
     }
     SetAllColor(DEFAULT_BACKGROUND, DEFAULT_TEXT);
     while (1) {
-        //프레임 관리 30프레임으로 고정
+        //프레임 관리 29프레임으로 고정
         int currentTick = GetTickCount();
         if (currentTick - lastTick < WAIT_TICK)
             continue;
