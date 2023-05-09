@@ -790,7 +790,6 @@ void InitBackGround(){
 enum GameState Dino_Game(){
     struct Player player = {SCREEN_MIN_X, SCREEN_MIN_Y, 100, 0, .isJumping = false};
     enum TileType Tile[SCREEN_MAX_Y][(SCREEN_MAX_X) / 2 + 1] = {EMPTY};
-    
 
     player.posX = 0;
     player.posY = GROUND_HEIGHT;
