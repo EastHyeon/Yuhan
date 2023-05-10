@@ -223,6 +223,7 @@ enum GameState MainMenu() {
             player.posY = GROUND_HEIGHT;
             TreeX = -10;
             score = 0;
+            treeMovementTick = 50;
             return GAME;
         case 1:
             return HELPMENU;
@@ -538,6 +539,7 @@ enum GameState GameOverMenu() {
             player.posY = GROUND_HEIGHT;
             TreeX = -10;
             score = 0;
+            treeMovementTick = 50;
             return GAME;
         case 1:
             return MAINMENU;
