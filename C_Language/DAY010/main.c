@@ -96,7 +96,7 @@ int main() {
     enum GameState gameState = MAINMENU;
 
     system("cls");
-    system("mode con cols=81 lines=31 | title C Lecture");
+    system("mode con cols=81 lines=31 | title Array Dino Game for C Lecture");
     CursorHide();
     int inputSensitivity = INPUT_SENSITIVITY;
 
@@ -501,9 +501,9 @@ enum GameState Game() {
 
 
     char msg[50] = " ";
-    sprintf_s(msg, "Score : %d", score);
+    sprintf(msg, "Score : %d", score);
     InputYX(msg, 1, 1);
-    sprintf_s(msg, "Tree Movement Tick : 1000/%d", treeMovementTick);
+    sprintf(msg, "Tree Movement Tick : 1000/%d", treeMovementTick);
     InputYX(msg, 2, 1);
 
     return GAME;
@@ -512,7 +512,7 @@ enum GameState Game() {
 enum GameState GameOverMenu() {
     InputCenter("--- YOU DIED ---", 3);
     char msg[50] = " ";
-    sprintf_s(msg, "Score : %d", score);
+    sprintf(msg, "Score : %d", score);
     int xPos = InputCenter(msg, 5);
     InputYX("Retry", 7, xPos);
     InputYX("Return to Menu", 8, xPos);
