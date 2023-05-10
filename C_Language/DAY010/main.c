@@ -1,26 +1,33 @@
 #include <stdio.h>
 #include <windows.h>
 #include <string.h>
+#include <stdbool.h>
+#include <conio.h>
 
 #define SCREEN_MAX_Y 30
 #define SCREEN_MAX_X 80
 #define ARRAY_SIZE SCREEN_MAX_Y * SCREEN_MAX_X + SCREEN_MAX_Y
+#define GROUND_HEIGHT 28
 
 #define WAIT_TICK 1000 / 15
+#define PHYSICS_TICK 1000 / 30
 #define INPUT_SENSITIVITY 150;
 #define VK_W 0x57
 #define VK_A 0x41
 #define VK_S 0x53
 #define VK_D 0x44
 
+enum GameState MainMenu(void);
+enum GameState HelpMenu(void);
+enum GameState ExitMenu(void);
+enum GameState Game(void);
+
+void InitializeScreen(void);
+void CursorHide(void);
 void SetColor(int);
 void GotoXY(int, int);
 int InputCenter(const char*, int);
 void InputYX(const char*, int, int);
-enum GameState MainMenu(void);
-enum GameState HelpMenu(void);
-enum GameState ExitMenu(void);
-void InitializeScreen(void);
 
 enum GameState {
     EXIT = 0,
@@ -44,15 +51,38 @@ enum CurrentInput{
     KEY_Enter
 } currentInput;
 
+struct Player
+{
+    int posX;
+    int posY;
+    int hp;
+    bool isGrounded;
+    bool isJumping;
+};
+
+
 // 스크린 출력 배열
 char screenBuffer2D[SCREEN_MAX_Y][SCREEN_MAX_X];
+
+// 메뉴에서 사용하는 전역 변수
 int inputValue = 0;
+char getCharTemp = ' ';
+
+// 게임로직에서 사용하는 전역 변수
+struct Player player = {2, GROUND_HEIGHT, 1, false, false};
+bool isGameOver = false;
+char playerTexture = '1';
+char objectTexture = '2';
+int lastPyisicsTick = 0;
+int TreeX = 1;
+int randomTree = 0;
 
 int main() {
     enum GameState gameState = MAINMENU;
 
     system("cls");
     system("mode con cols=81 lines=31 | title C Lecture");
+    CursorHide();
 
     int lastTick = 0;
     int lastInputTick = 0;
@@ -60,15 +90,12 @@ int main() {
 
     while (1) {
         InitializeScreen();
-
+        
         int currentTick = GetTickCount();
-        if (currentTick - lastTick < WAIT_TICK)
-            continue;
-        lastTick = currentTick;
 
 #pragma region INPUT_PASS
         //Input PASS
-
+    
         if (GetAsyncKeyState(VK_W) & 0x8000) {
             if (currentTick - lastInputTick > inputSensitivity){
                 currentInput = KEY_W;
@@ -115,6 +142,7 @@ int main() {
             gameState = MainMenu();
             break;
         case GAME:
+            gameState = Game();
             break;
         case HELPMENU:
             gameState = HelpMenu();
@@ -136,7 +164,7 @@ int main() {
                 screenBuffer[i] = screenBuffer2D[y][x];
         }
         screenBuffer[ARRAY_SIZE - 1] = '\0';
-
+        
         //Render PASS
         printf("%s\n", screenBuffer);
 
@@ -158,7 +186,7 @@ void GotoXY(int x, int y) {
 }
 
 enum GameState MainMenu() {
-    InputCenter("Dino Game", 3);
+    InputCenter("Dino Run Game", 3);
     int xPos = InputCenter("START", 5);
     InputYX("HELP", 6, xPos);
     InputYX("EXIT", 7, xPos);
@@ -179,7 +207,7 @@ enum GameState MainMenu() {
         inputValue = 0;
         switch (temp) {
         case 0:
-            return MAINMENU;
+            return GAME;
         case 1:
             return HELPMENU;
         case 2:
@@ -197,7 +225,7 @@ enum GameState HelpMenu() {
     InputCenter("Created for a C language class assignment", 5);
     InputCenter("Both WASD and ArrowKeys are available", 6);
     InputCenter("Spacebar to return to the menu", 8);
-
+    
 
     if (currentInput == KEY_Spacebar) {
         return MAINMENU;
@@ -236,6 +264,67 @@ enum GameState ExitMenu() {
     return EXITMENU;
 }
 
+enum GameState Game(){
+    // if (currentInput == KEY_W)
+    //     player.posY--;
+    if (currentInput == KEY_A && player.posX > 1)
+        player.posX--;
+    // if (currentInput == KEY_S)
+    //     player.posY++;
+    if(currentInput == KEY_D && player.posX < SCREEN_MAX_X - 5)
+        player.posX++;
+    
+    if(currentInput == KEY_Spacebar){
+        player.isJumping = true;
+        player.isGrounded = false;
+    }
+
+    int currentTick = GetTickCount();
+
+    if(currentTick - lastPyisicsTick > PHYSICS_TICK){
+        if(TreeX < -10){
+            //이전 오브젝트 삭제
+
+            randomTree = rand() % 5 + 1;
+            TreeX = SCREEN_MAX_X - 1;
+        }
+        TreeX--;
+        lastPyisicsTick = currentTick;
+    }
+
+    //0111
+    //0111
+    //1110
+    //1110
+    //1010
+
+    screenBuffer2D[player.posY][player.posX] = playerTexture;
+    screenBuffer2D[player.posY][player.posX + 2] = playerTexture;
+
+    screenBuffer2D[player.posY - 1][player.posX] = playerTexture;
+    screenBuffer2D[player.posY - 1][player.posX + 1] = playerTexture;
+    screenBuffer2D[player.posY - 1][player.posX + 2] = playerTexture;
+    screenBuffer2D[player.posY - 2][player.posX] = playerTexture;
+    screenBuffer2D[player.posY - 2][player.posX + 1] = playerTexture;
+    screenBuffer2D[player.posY - 2][player.posX + 2] = playerTexture;
+    screenBuffer2D[player.posY - 3][player.posX + 1] = playerTexture;
+    screenBuffer2D[player.posY - 3][player.posX + 2] = playerTexture;
+    screenBuffer2D[player.posY - 3][player.posX + 3] = playerTexture;
+    screenBuffer2D[player.posY - 4][player.posX + 1] = playerTexture;
+    screenBuffer2D[player.posY - 4][player.posX + 2] = playerTexture;
+    screenBuffer2D[player.posY - 4][player.posX + 3] = playerTexture;
+
+    if (TreeX < 0){
+        if(randomTree == 1){
+            screenBuffer2D[GROUND_HEIGHT][TreeX] = objectTexture;
+        }
+    }
+
+    screenBuffer2D[GROUND_HEIGHT][TreeX] = objectTexture;
+
+    return GAME;
+}
+
 void InitializeScreen() {
     currentInput = KEY_Wait;
     GotoXY(0, 0);
@@ -254,8 +343,14 @@ void InitializeScreen() {
         else
             screenBuffer2D[y][x] = ' ';
     }
-    
     InputCenter("| 202327005 Kim Dong Hyeon |", SCREEN_MAX_Y - 1);
+}
+
+void CursorHide(){
+    CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+    cursorInfo.dwSize = 1;
+    cursorInfo.bVisible = false;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
 int InputCenter(const char* msg, int y) {
@@ -266,7 +361,6 @@ int InputCenter(const char* msg, int y) {
     for (int i = 0; i < strlen(msg); i++) {
         screenBuffer2D[y][xPos + i] = msg[i];
     }
-
     return xPos;
 }
 
