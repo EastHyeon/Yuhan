@@ -7,6 +7,8 @@ int main(){
     while(b <= a){
         printf("b : %d\n", b);
         printf("%c : %d (decimal)\n", c, c);
+        printf("HELLO");
+        printf("새로운 기능");
 
         b++;
     }
