@@ -69,10 +69,10 @@ char getCharTemp = ' ';
 
 struct Player player = {10, GROUND_HEIGHT, 1, false, false };
 bool isGameOver = false;
-char playerTexture = '#';
+char playerTexture = '1';
 char objectTexture = '%';
 
-int treeMovementTick = 50;
+int treeMovementTick = 40;
 int lastTreeMovementTick = 0;
 int lastphysicsTick = 0;
 int lastInputTick = 0;
@@ -167,7 +167,7 @@ int main() {
         }
 
 #pragma endregion
-        // 2ì°¨ì›ë°°ì—´ì„ ê°œí–‰ë¬¸ìë¥¼ í¬í•¨í•˜ì—¬ 1ì°¨ì› ë°°ì—´ë¡œ ë³€í™˜
+        // 2ì°¨ì›ë°°ì—´?„ ê°œí–‰ë¬¸ìë¥? ?¬?•¨?•˜?—¬ 1ì°¨ì› ë°°ì—´ë¡? ë³??™˜
         char screenBuffer[ARRAY_SIZE];
         for (int i = 0; i < ARRAY_SIZE; i++) {
             int y = i / (SCREEN_MAX_X + 1);
@@ -223,7 +223,7 @@ enum GameState MainMenu() {
             player.posY = GROUND_HEIGHT;
             TreeX = -10;
             score = 0;
-            treeMovementTick = 50;
+            treeMovementTick = 40;
             return GAME;
         case 1:
             return HELPMENU;
@@ -290,7 +290,7 @@ enum GameState Game() {
     int currentTick = GetTickCount();
 
 
-    // ë¹„ë™ê¸° ì…ë ¥ì„ ìœ„í•´ ë”°ë¡œ ì…ë ¥ë°›ìŠµë‹ˆë‹¤.
+    // ë¹„ë™ê¸? ?…? ¥?„ ?œ„?•´ ?”°ë¡? ?…? ¥ë°›ìŠµ?‹ˆ?‹¤.
     if (currentTick - lastInputTick > 1000/20) {
         if ((GetAsyncKeyState(VK_D) & 0x8000 || GetAsyncKeyState(VK_RIGHT) & 0x8000) && player.posX < SCREEN_MAX_X - 6) {
             player.posX++;
@@ -494,8 +494,8 @@ enum GameState Game() {
     currentTime = clock();
     if (((currentTime - startTime) / CLOCKS_PER_SEC) >= 1) {
         score++;
-        if (score % 15 == 0 && treeMovementTick < 100) {
-            treeMovementTick *= 2;
+        if (score % 15 == 0) {
+            treeMovementTick = 70;
         }
         startTime = currentTime;
     }
@@ -539,7 +539,7 @@ enum GameState GameOverMenu() {
             player.posY = GROUND_HEIGHT;
             TreeX = -10;
             score = 0;
-            treeMovementTick = 50;
+            treeMovementTick = 40;
             return GAME;
         case 1:
             return MAINMENU;
@@ -580,7 +580,7 @@ void CursorHide() {
 }
 
 int InputCenter(const char* msg, int y) {
-    int xPos = (SCREEN_MAX_X - strlen(msg)) / 2;
+    int xPos = SCREEN_MAX_X / 2 - strlen(msg) / 2;
 
     for (int i = 0; i < strlen(msg); i++) {
         screenBuffer2D[y][xPos + i] = msg[i];
