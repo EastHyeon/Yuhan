@@ -48,24 +48,24 @@ int main(){
         case EXIT:
             system("cls");
             return 0;
-            case MENU:
-                gameState = MainMenu();
-                break;
-            case GAME:
-                gameState = GameMenu();
-                break;
-            case HELP:
-                gameState = HelpMenu();
-                break;
-            case DINO:
-                gameState = Dino_Game();
-                break;
-            case MAZE:
-                gameState = Maze_Game();
-                break;
-            default:
-                gameState = MainMenu();
-                break;
+        case MENU:
+            gameState = MainMenu();
+            break;
+        case GAME:
+            gameState = GameMenu();
+            break;
+        case HELP:
+            gameState = HelpMenu();
+            break;
+        case DINO:
+            gameState = Dino_Game();
+            break;
+        case MAZE:
+            gameState = Maze_Game();
+            break;
+        default:
+            gameState = MainMenu();
+            break;
         }
     }
 }
