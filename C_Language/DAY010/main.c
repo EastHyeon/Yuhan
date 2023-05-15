@@ -2,16 +2,12 @@
 #include <windows.h>
 #include <string.h>
 #include <stdbool.h>
-#include <time.h>
 
 #define SCREEN_MAX_Y 30
 #define SCREEN_MAX_X 80
 #define ARRAY_SIZE SCREEN_MAX_Y * SCREEN_MAX_X + SCREEN_MAX_Y
 #define GROUND_HEIGHT 28
 
-#define WAIT_TICK 1000 / 15
-#define PHYSICS_TICK 1000 / 30
-#define INPUT_SENSITIVITY 150
 #define VK_W 0x57
 #define VK_A 0x41
 #define VK_S 0x53
@@ -73,10 +69,11 @@ struct Player player = {10, GROUND_HEIGHT, 1, false, false, false };
 bool isGameOver = false;
 char playerTexture = '#';
 char objectTexture = '%';
-int TreeX = -10;
+int TreePosX = -10;
 int randomTree = 0;
 
-int spaceBarInputSensitvity = 8;
+DWORD currentTick = 0;
+DWORD lastTick, lastAnimationTick, lastInputTick, lastScoreTick = 0;
 
 bool legFlag = true;
 bool isDown = false;
@@ -86,7 +83,7 @@ bool isPause = false;
 #define MAX_JUMP_HEIGHT SCREEN_MAX_Y - 12
 
 int score = 0;
-clock_t startTime, currentTime;
+
 
 int main() {
     enum GameState gameState = MAINMENU;
@@ -98,16 +95,26 @@ int main() {
     while (1) {
         InitializeScreen();
 
-        DWORD currentTick = GetTickCount();
-        //Input PASS
-        if (GetAsyncKeyState(VK_W) & 0x8000 || GetAsyncKeyState(VK_UP) & 0x8000) {
-            currentInput = KEY_W;
-        }
-        if (GetAsyncKeyState(VK_S) & 0x8000 || GetAsyncKeyState(VK_DOWN) & 0x8000) {
-            currentInput = KEY_S;
-        }
-        if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_RETURN) & 0x8000) {
+        // Limit input rate to 1 / 60 second
+        // Limit frame rate to 60 frame
+        currentTick = GetTickCount();
+        if (currentTick - lastTick < 1000/60)
+            continue;
+        lastTick = currentTick;
+
+        // Input PASS
+        // Limit input rate to 1 / 15 second
+        if(currentTick - lastInputTick > 1000/15){
+            if (GetAsyncKeyState(VK_W) & 0x8000 || GetAsyncKeyState(VK_UP) & 0x8000) {
+                currentInput = KEY_W;
+            }
+            if (GetAsyncKeyState(VK_S) & 0x8000 || GetAsyncKeyState(VK_DOWN) & 0x8000) {
+                currentInput = KEY_S;
+            }
+            if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_RETURN) & 0x8000) {
                 currentInput = KEY_Spacebar;
+            }
+            lastInputTick = currentTick;
         }
 
 #pragma region Logic_PASS
@@ -176,10 +183,12 @@ enum GameState MainMenu() {
 
     int yPos = inputValue + 5;
 
-    if (currentInput == KEY_W && yPos > 5)
+    if (currentInput == KEY_W && yPos > 5){
         inputValue--;
-    if (currentInput == KEY_S && yPos < 7)
+    }
+    if (currentInput == KEY_S && yPos < 7){
         inputValue++;
+    }
 
     screen2D[yPos][xPos] = '>';
 
@@ -251,10 +260,6 @@ enum GameState ExitMenu() {
 }
 
 enum GameState Game() {
-
-    int currentTick = GetTickCount();
-
-
     // 비동기 입력을 위해 따로 입력받습니다.
     if ((GetAsyncKeyState(VK_D) & 0x8000 || GetAsyncKeyState(VK_RIGHT) & 0x8000) && player.posX < SCREEN_MAX_X - 6) {
         player.posX++;
@@ -288,11 +293,11 @@ enum GameState Game() {
         return MAINMENU;
     }
 
-    if (TreeX < -10) {
+    if (TreePosX < -10) {
         randomTree = rand() % 5;
-        TreeX = SCREEN_MAX_X - 1;
+        TreePosX = SCREEN_MAX_X - 1;
     }
-    TreeX--;
+    TreePosX--;
 
     if (player.isJumping)
         player.posY--;
@@ -351,13 +356,18 @@ enum GameState Game() {
         screen2D[player.posY - 1][player.posX + 3] = playerTexture;
     }
 
-    if (legFlag) {
-        legFlag = false;
+    // Update the leg animation after 1/4(250ms)second.
+    if(currentTick - lastAnimationTick > 1000/4){
+        if (legFlag) {
+            legFlag = false;
+        }
+        else {
+            legFlag = true;
+        }
+        lastAnimationTick = currentTick;
     }
-    else {
-        legFlag = true;
-    }
-    
+
+    // If player is running, play run animation.
     if(player.isRuning){
         if (legFlag)
             screen2D[player.posY][player.posX + 1] = playerTexture;
@@ -369,85 +379,85 @@ enum GameState Game() {
         screen2D[player.posY][player.posX + 3] = playerTexture;
     }
 
-    int ObjectX = 0;
-    int ObjectY = 0;
+    int ObjectSizeX = 0;
+    int ObjectSizeY = 0;
     switch (randomTree){
     case 0:
-        ObjectX = 5;
-        ObjectY = 2;
-        for (int i = 0; i < ObjectX * ObjectY; i++) {
-            int y = i / ObjectX;
-            int x = i % ObjectX;
-            if (TreeX + x > 0 && TreeX + x < SCREEN_MAX_X - 1) {
-                if (screen2D[GROUND_HEIGHT - y][TreeX + x] == playerTexture) {
+        ObjectSizeX = 5;
+        ObjectSizeY = 2;
+        for (int i = 0; i < ObjectSizeX * ObjectSizeY; i++) {
+            int y = i / ObjectSizeX;
+            int x = i % ObjectSizeX;
+            if (TreePosX + x > 0 && TreePosX + x < SCREEN_MAX_X - 1) {
+                if (screen2D[GROUND_HEIGHT - y][TreePosX + x] == playerTexture) {
                     return GAMEOVERMENU;
                 }
                 else {
-                    screen2D[GROUND_HEIGHT - y][TreeX + x] = objectTexture;
+                    screen2D[GROUND_HEIGHT - y][TreePosX + x] = objectTexture;
                 }
             }
         }
         break;
     case 1:
-        ObjectX = 7;
-        ObjectY = 6;
-        for (int i = 0; i < ObjectX * ObjectY; i++) {
-            int y = i / ObjectX;
-            int x = i % ObjectX;
-            if (TreeX + x > 0 && TreeX + x < SCREEN_MAX_X - 1) {
-                if (screen2D[GROUND_HEIGHT - y][TreeX + x] == playerTexture) {
+        ObjectSizeX = 7;
+        ObjectSizeY = 6;
+        for (int i = 0; i < ObjectSizeX * ObjectSizeY; i++) {
+            int y = i / ObjectSizeX;
+            int x = i % ObjectSizeX;
+            if (TreePosX + x > 0 && TreePosX + x < SCREEN_MAX_X - 1) {
+                if (screen2D[GROUND_HEIGHT - y][TreePosX + x] == playerTexture) {
                     return GAMEOVERMENU;
                 }
                 else {
-                    screen2D[GROUND_HEIGHT - y][TreeX + x] = objectTexture;
+                    screen2D[GROUND_HEIGHT - y][TreePosX + x] = objectTexture;
                 }
             }
         }
         break;
     case 2:
-        ObjectX = 2;
-        ObjectY = 5;
-        for (int i = 0; i < ObjectX * ObjectY; i++) {
-            int y = i / ObjectX;
-            int x = i % ObjectX;
-            if (TreeX + x > 0 && TreeX + x < SCREEN_MAX_X - 1) {
-                if (screen2D[GROUND_HEIGHT - y][TreeX + x] == playerTexture) {
+        ObjectSizeX = 2;
+        ObjectSizeY = 5;
+        for (int i = 0; i < ObjectSizeX * ObjectSizeY; i++) {
+            int y = i / ObjectSizeX;
+            int x = i % ObjectSizeX;
+            if (TreePosX + x > 0 && TreePosX + x < SCREEN_MAX_X - 1) {
+                if (screen2D[GROUND_HEIGHT - y][TreePosX + x] == playerTexture) {
                     return GAMEOVERMENU;
                 }
                 else {
-                    screen2D[GROUND_HEIGHT - y][TreeX + x] = objectTexture;
+                    screen2D[GROUND_HEIGHT - y][TreePosX + x] = objectTexture;
                 }
             }
         }
         break;
     case 3:
-        ObjectX = 10;
-        ObjectY = 6;
-        for (int i = 0; i < ObjectX * ObjectY; i++) {
-            int y = i / ObjectX;
-            int x = i % ObjectX;
-            if (TreeX + x > 0 && TreeX + x < SCREEN_MAX_X - 1) {
-                if (screen2D[GROUND_HEIGHT - y - 4][TreeX + x] == playerTexture) {
+        ObjectSizeX = 10;
+        ObjectSizeY = 6;
+        for (int i = 0; i < ObjectSizeX * ObjectSizeY; i++) {
+            int y = i / ObjectSizeX;
+            int x = i % ObjectSizeX;
+            if (TreePosX + x > 0 && TreePosX + x < SCREEN_MAX_X - 1) {
+                if (screen2D[GROUND_HEIGHT - y - 4][TreePosX + x] == playerTexture) {
                     return GAMEOVERMENU;
                 }
                 else {
-                    screen2D[GROUND_HEIGHT - y - 4][TreeX + x] = objectTexture;
+                    screen2D[GROUND_HEIGHT - y - 4][TreePosX + x] = objectTexture;
                 }
             }
         }
         break;
     case 4:
-        ObjectX = 5;
-        ObjectY = 10;
-        for (int i = 0; i < ObjectX * ObjectY; i++) {
-            int y = i / ObjectX;
-            int x = i % ObjectX;
-            if (TreeX + x > 0 && TreeX + x < SCREEN_MAX_X - 1) {
-                if (screen2D[GROUND_HEIGHT - y - 4][TreeX + x] == playerTexture) {
+        ObjectSizeX = 5;
+        ObjectSizeY = 10;
+        for (int i = 0; i < ObjectSizeX * ObjectSizeY; i++) {
+            int y = i / ObjectSizeX;
+            int x = i % ObjectSizeX;
+            if (TreePosX + x > 0 && TreePosX + x < SCREEN_MAX_X - 1) {
+                if (screen2D[GROUND_HEIGHT - y - 4][TreePosX + x] == playerTexture) {
                     return GAMEOVERMENU;
                 }
                 else {
-                    screen2D[GROUND_HEIGHT - y - 4][TreeX + x] = objectTexture;
+                    screen2D[GROUND_HEIGHT - y - 4][TreePosX + x] = objectTexture;
                 }
             }
         }
@@ -456,16 +466,17 @@ enum GameState Game() {
         break;
     }
 
-    currentTime = clock();
-    if (((currentTime - startTime) / CLOCKS_PER_SEC) >= 1) {
-        score++;
-        startTime = currentTime;
+    // Increase the score by 1 after 1 second (1000 ms).
+    if(currentTick - lastScoreTick > 1000){
+        if(lastScoreTick != 0){
+            score++;
+            lastScoreTick = currentTick;
+        }
     }
-
 
     char msg[50] = " ";
     sprintf(msg, "Score : %d", score);
-    InputYX(msg, 1, 1);
+    InputYX(msg, 1, 2);
     return GAME;
 }
 
@@ -549,10 +560,9 @@ void InputYX(const char* msg, int y, int x) {
 }
 
 void InitializeGame(){
-    startTime = clock();
     player.posX = 5;
     player.posY = GROUND_HEIGHT;
     player.isRuning = false;
-    TreeX = -10;
+    TreePosX = -10;
     score = 0;
 }
