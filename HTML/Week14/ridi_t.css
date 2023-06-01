@@ -1,0 +1,6 @@
+.total{width: 900px; height: 1050px; background-color: lightgray;}
+#poster{text-align: center;}
+#logo{display: inline-block;}
+#logo>img{width: 350px; margin: 10px;}
+#nav{float: right; margin: 10px; margin-right: 70px;}
+#nav a{ text-decoration: none; color: black;}
